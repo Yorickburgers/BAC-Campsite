@@ -2,8 +2,6 @@ package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "specializations")
 public class Specialization {
@@ -12,14 +10,20 @@ public class Specialization {
     private Long id;
     private String name;
     private String description;
-    private List<String> traits;
+    private String traitOne;
+    private String traitTwo;
+    private String traitThree;
+    private String traitFour;
 
     public Specialization() {}
 
-    public Specialization(String name, String description, List<String> traits) {
+    public Specialization(String name, String description,  String traitOne, String traitTwo, String traitThree, String traitFour) {
         this.name = name;
         this.description = description;
-        this.traits = traits;
+        this.traitOne = traitOne;
+        this.traitTwo = traitTwo;
+        this.traitThree = traitThree;
+        this.traitFour = traitFour;
     }
 
     public Long getId() {
@@ -42,11 +46,35 @@ public class Specialization {
         this.description = description;
     }
 
-    public List<String> getTraits() {
-        return traits;
+    public String getTraitOne() {
+        return traitOne;
     }
 
-    public void setTraits(List<String> traits) {
-        this.traits = traits;
+    public void setTraitOne(String traitOne) {
+        this.traitOne = traitOne;
+    }
+
+    public String getTraitTwo() {
+        return traitTwo;
+    }
+
+    public void setTraitTwo(String traitTwo) {
+        this.traitTwo = traitTwo;
+    }
+
+    public String getTraitThree() {
+        return traitThree;
+    }
+
+    public void setTraitThree(String traitThree) {
+        this.traitThree = traitThree;
+    }
+
+    public String getTraitFour() {
+        return traitFour;
+    }
+
+    public void setTraitFour(String traitFour) {
+        this.traitFour = traitFour;
     }
 }

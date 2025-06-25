@@ -1,2 +1,13 @@
 insert into professions (name, description, hp_modifier, primary_ability, trait_one, trait_two, trait_three, trait_four)
-values  ('Barbarian', 'A Barbarian is a brutish melee attacker who uses its rage to empower its attacks with reckless abandon', 12, 'Strength', 'Rage', 'Unarmored Defense', 'Reckless Attack', 'Great Weapon Master');
+values  ('Barbarian', 'A Barbarian is a brutish melee attacker who uses their rage to empower their attacks with reckless abandon.', 12, 'Strength', 'Rage', 'Unarmored Defense (Constitution)', 'Reckless Attack', 'Great Weapon Master'),
+        ('Bard', 'A Bard is a charismatic musician who uses the power of magic to support and inspire their allies and confuse and control enemies.', 8, 'Charisma', 'Vicious Mockery', 'Bardic Inspiration', 'Mantle of Majesty', 'Song of Rest'),
+        ('Cleric', 'A Cleric is a devout individual who receives spellcasting powers via worship of a deity, which they use for devastating attacks and protective magics.', 8, 'Wisdom', 'Channel Divinity', 'Turn Undead', 'Blessed Strikes', 'Divine Intervention'),
+        ('Druid', 'A Druid is a peaceful individual who lives in harmony with nature, being able to shape into animals to support their allies.', 8, 'Wisdom', 'Wild Shaping', 'Regrowth', 'Speak with Animals and Plants', 'Ageless'),
+        ('Fighter', 'A Fighter is a trained attacker who has honed their skill in combat to deliver devastating attacks.', 10, 'Strength', 'Parry', 'Shield Master', 'Second Wind', 'Extra Attack'),
+        ('Monk', 'A Monk is a disciplined martial artist who channels the power of their spirit into their fists to make lightning-fast strikes.', 8, 'Dexterity', 'Ki Points', 'Unarmored Defense (Wisdom)', 'Flurry of Blows', 'Deflect Attack'),
+        ('Paladin', 'A paladin is a lawful and devout knight who emboldens their resolve by binding themselves to an oath', 10, 'Strength', 'Smite', 'Divine Shield', 'Mounted Combat', 'Penance'),
+        ('Ranger', 'A Ranger is accustomed to live in the wilds, using their knowledge of nature to support allies and control the battlefield.', 10, 'Dexterity', 'Animal Companion', 'Trapping', 'Foraging', 'Snipe Shot'),
+        ('Rogue', 'A Rogue is a thief who hides in the shadows and ambushes enemies to deal crippling sneak attacks.', 8, 'Dexterity', 'Stealth', 'Sneak Attack', 'Parlor Tricks', 'Tricks of the Trade'),
+        ('Sorcerer', 'A Sorcerer is a spellcaster who has gained magic ability through birth or an uncommon occurrence', 6, 'Charisma', 'Metamagic', 'Telepath', 'Magic Veins', 'Mystic Arcanum'),
+        ('Warlock', 'A Warlock received spellcasting powers through a pact they have made with a powerful patron.', 8, 'Charisma', 'Pact Magic', 'Eldritch Invocations', 'Mind Games', 'Ritualist'),
+        ('Wizard', 'A Wizard has studied magic meticulously, gaining spellcasting powers through sheer knowledge.', 6, 'Intelligence', 'Spell Book', 'Transcribe Scroll', 'Familiar', 'Recuperate');

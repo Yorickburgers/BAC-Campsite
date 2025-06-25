@@ -1,0 +1,2 @@
+insert into professions (name, description, hp_modifier, primary_ability, trait_one, trait_two, trait_three, trait_four)
+values  ('Barbarian', 'A Barbarian is a brutish melee attacker who uses its rage to empower its attacks with reckless abandon', 12, 'Strength', 'Rage', 'Unarmored Defense', 'Reckless Attack', 'Great Weapon Master');

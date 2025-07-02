@@ -2,6 +2,8 @@ package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.dtos.CampaignRequestDto;
 import nl.novi.baccampsite.dtos.CampaignResponseDto;
+import nl.novi.baccampsite.dtos.CharacterRequestDto;
+import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,8 +22,8 @@ public class CampaignController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CampaignResponseDto>> retrieveCampaigns(@RequestParam(required = false) Long userId) {
-        return ResponseEntity.ok(campaignService.retrieveCampaigns(userId));
+    public ResponseEntity<List<CampaignResponseDto>> retrieveCampaigns() {
+        return ResponseEntity.ok(campaignService.retrieveCampaigns());
     }
 
     @GetMapping("/{id}")
@@ -39,6 +41,18 @@ public class CampaignController {
                         .path("/" + campaignResponseDto.id).toUriString());
 
         return ResponseEntity.created(uri).body(campaignResponseDto);
+    }
+
+    @PostMapping("/{id}/characters")
+    public ResponseEntity<CharacterResponseDto> createCharacterForCampaign(@PathVariable Long id, @RequestBody CharacterRequestDto characterRequestDto) {
+        CharacterResponseDto character = campaignService.createCharacterForCampaign(characterRequestDto);
+
+        URI uri = URI.create(
+                ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/" + character.id).toUriString());
+
+        return ResponseEntity.created(uri).body(character);
     }
 
     @PutMapping("/{id}")

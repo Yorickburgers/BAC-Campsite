@@ -20,8 +20,8 @@ public class CharacterController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CharacterResponseDto>> retrieveCharactersByUser(@RequestParam Long userId) {
-        return ResponseEntity.ok(characterService.retrieveCharactersByUser(userId));
+    public ResponseEntity<List<CharacterResponseDto>> retrieveCharactersByUser() {
+        return ResponseEntity.ok(characterService.retrieveCharactersByUser());
     }
 
     @GetMapping("/{id}")
@@ -44,6 +44,16 @@ public class CharacterController {
     @PutMapping("/{id}")
     public ResponseEntity<CharacterResponseDto>  updateCharacter(@PathVariable Long id, @RequestBody CharacterRequestDto characterRequestDto) {
         return ResponseEntity.ok().body(characterService.updateCharacter(id, characterRequestDto));
+    }
+
+    @PutMapping("/{id}/unclaim")
+    public ResponseEntity<CharacterResponseDto> unclaimCharacter(@PathVariable Long id) {
+        return ResponseEntity.ok().body(characterService.unclaimCharacter(id));
+    }
+
+    @PutMapping("/{id}/claim")
+    public ResponseEntity<CharacterResponseDto> claimCharacter(@PathVariable Long id) {
+        return ResponseEntity.ok().body(characterService.claimCharacter(id));
     }
 
     @DeleteMapping("/{id}")

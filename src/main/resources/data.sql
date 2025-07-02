@@ -5,12 +5,12 @@ values  ('Barbarian', 'A Barbarian is a brutish melee attacker who uses their ra
         ('Druid', 'A Druid is a peaceful individual who lives in harmony with nature, being able to shape into animals to support their allies.', 8, 'Wisdom', 'Wild Shaping', 'Regrowth', 'Speak with Animals and Plants', 'Ageless'),
         ('Fighter', 'A Fighter is a trained attacker who has honed their skill in combat to deliver devastating attacks.', 10, 'Strength', 'Parry', 'Shield Master', 'Second Wind', 'Extra Attack'),
         ('Monk', 'A Monk is a disciplined martial artist who channels the power of their spirit into their fists to make lightning-fast strikes.', 8, 'Dexterity', 'Ki Points', 'Unarmored Defense (Wisdom)', 'Flurry of Blows', 'Deflect Attack'),
-        ('Paladin', 'A paladin is a lawful and devout knight who emboldens their resolve by binding themselves to an oath', 10, 'Strength', 'Smite', 'Divine Shield', 'Mounted Combat', 'Penance'),
-        ('Ranger', 'A Ranger is accustomed to live in the wilds, using their knowledge of nature to support allies and control the battlefield.', 10, 'Dexterity', 'Animal Companion', 'Trapping', 'Foraging', 'Snipe Shot'),
+        ('Paladin', 'A Paladin is a lawful and devout knight who emboldens their resolve by binding themselves to an oath.', 10, 'Strength', 'Smite', 'Divine Shield', 'Mounted Combat', 'Penance'),
+        ('Ranger', 'A Ranger is accustomed to living in the wilds, using their knowledge of nature to support allies and control the battlefield.', 10, 'Dexterity', 'Animal Companion', 'Trapping', 'Foraging', 'Snipe Shot'),
         ('Rogue', 'A Rogue is a thief who hides in the shadows and ambushes enemies to deal crippling sneak attacks.', 8, 'Dexterity', 'Stealth', 'Sneak Attack', 'Parlor Tricks', 'Tricks of the Trade'),
-        ('Sorcerer', 'A Sorcerer is a spellcaster who has gained magic ability through birth or an uncommon occurrence', 6, 'Charisma', 'Metamagic', 'Telepath', 'Magic Veins', 'Mystic Arcanum'),
-        ('Warlock', 'A Warlock received spellcasting powers through a pact they have made with a powerful patron.', 8, 'Charisma', 'Pact Magic', 'Eldritch Invocations', 'Mind Games', 'Ritualist'),
-        ('Wizard', 'A Wizard has studied magic meticulously, gaining spellcasting powers through sheer knowledge.', 6, 'Intelligence', 'Spell Book', 'Transcribe Scroll', 'Familiar', 'Recuperate');
+        ('Sorcerer', 'A Sorcerer has volatile magic coursing through their veins since birth or a rare occurrence.', 6, 'Charisma', 'Metamagic', 'Telepath', 'Magic Veins', 'Mystic Arcanum'),
+        ('Warlock', 'A Warlock received versatile and often dark spellcasting powers through a pact they have made with a powerful patron.', 8, 'Charisma', 'Pact Magic', 'Eldritch Invocations', 'Mind Games', 'Ritualist'),
+        ('Wizard', 'A Wizard has studied magic meticulously, having gained magical flexibility to overcome any challenge through a wide range of spells.', 6, 'Intelligence', 'Spell Book', 'Transcribe Scroll', 'Familiar', 'Recuperate');
 
 insert into specializations (name, description, trait_one, trait_two, trait_three, trait_four)
 values  ('Path of the Totem', 'The Barbarian channels the bestial powers of a totem spirit, giving them bestial powers.', 'Pick Totem', 'Charge', 'Fury', 'Primal Savagery'),

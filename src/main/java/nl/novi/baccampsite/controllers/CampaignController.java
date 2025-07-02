@@ -4,6 +4,7 @@ import nl.novi.baccampsite.dtos.CampaignRequestDto;
 import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.services.CampaignService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,8 +23,8 @@ public class CampaignController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CampaignResponseDto>> retrieveCampaigns() {
-        return ResponseEntity.ok(campaignService.retrieveCampaigns());
+    public ResponseEntity<List<CampaignResponseDto>> retrieveAllCampaigns() {
+        return ResponseEntity.ok(campaignService.retrieveAllCampaigns());
     }
 
     @GetMapping("/{id}")
@@ -45,7 +46,7 @@ public class CampaignController {
 
     @PostMapping("/{id}/characters")
     public ResponseEntity<CharacterResponseDto> createCharacterForCampaign(@PathVariable Long id, @RequestBody CharacterRequestDto characterRequestDto) {
-        CharacterResponseDto character = campaignService.createCharacterForCampaign(characterRequestDto);
+        CharacterResponseDto character = campaignService.createCharacterForCampaign(id, characterRequestDto);
 
         URI uri = URI.create(
                 ServletUriComponentsBuilder

@@ -10,7 +10,6 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/specializations")
 public class SpecializationController {
     private final SpecializationService specializationService;
 
@@ -18,19 +17,24 @@ public class SpecializationController {
         this.specializationService = specializationService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<SpecializationResponseDto>> retrieveSpecializations(@RequestParam Long professionId) {
-        return ResponseEntity.ok(specializationService.retrieveSpecializations(professionId));
+    @GetMapping("/professions/{professionId}/specializations")
+    public ResponseEntity<List<SpecializationResponseDto>> retrieveSpecializationsByProfession(@PathVariable Long professionId) {
+        return ResponseEntity.ok(specializationService.retrieveSpecializationsByProfession(professionId));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/specializations")
+    public ResponseEntity<List<SpecializationResponseDto>> retrieveAllSpecializations() {
+        return ResponseEntity.ok(specializationService.retrieveAllSpecializations());
+    }
+
+    @GetMapping("/specializations/{id}")
     public ResponseEntity<SpecializationResponseDto>  retrieveSpecialization(@PathVariable Long id) {
         return ResponseEntity.ok(specializationService.retrieveSpecialization(id));
     }
 
-    @PostMapping
-    public ResponseEntity<SpecializationResponseDto> createSpecialization(@RequestBody SpecializationRequestDto specializationRequestDto) {
-        SpecializationResponseDto specializationResponseDto = specializationService.createSpecialization(specializationRequestDto);
+    @PostMapping("/professions/{professionId}/specializations")
+    public ResponseEntity<SpecializationResponseDto> createSpecialization(@PathVariable Long professionId, @RequestBody SpecializationRequestDto specializationRequestDto) {
+        SpecializationResponseDto specializationResponseDto = specializationService.createSpecialization(professionId, specializationRequestDto);
 
         URI uri = URI.create(
                 ServletUriComponentsBuilder
@@ -40,12 +44,12 @@ public class SpecializationController {
         return ResponseEntity.created(uri).body(specializationResponseDto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/specializations/{id}")
     public ResponseEntity<SpecializationResponseDto>  updateSpecialization(@PathVariable Long id, @RequestBody SpecializationRequestDto specializationRequestDto) {
         return ResponseEntity.ok().body(specializationService.updateSpecialization(id, specializationRequestDto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/specializations/{id}")
     public ResponseEntity<String> deleteSpecialization(@PathVariable Long id) {
         return ResponseEntity.ok(specializationService.deleteSpecialization(id));
     }

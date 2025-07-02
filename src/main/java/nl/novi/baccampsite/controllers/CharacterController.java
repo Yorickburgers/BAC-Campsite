@@ -20,8 +20,8 @@ public class CharacterController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CharacterResponseDto>> retrieveCharacters(@RequestParam Long userId) {
-        return ResponseEntity.ok(characterService.retrieveCharacters(userId));
+    public ResponseEntity<List<CharacterResponseDto>> retrieveCharactersByUser(@RequestParam Long userId) {
+        return ResponseEntity.ok(characterService.retrieveCharactersByUser(userId));
     }
 
     @GetMapping("/{id}")

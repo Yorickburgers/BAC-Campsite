@@ -19,12 +19,16 @@ public class SpecializationMapper {
 
     public static Specialization toSpecialization (SpecializationRequestDto dto) {
         Specialization spec = new Specialization();
+        updateSpecializationFromDto(dto, spec);
+        return spec;
+    }
+
+    public static void updateSpecializationFromDto (SpecializationRequestDto dto, Specialization spec) {
         spec.setName(dto.name);
         spec.setDescription(dto.description);
         spec.setTraitOne(dto.traitOne);
         spec.setTraitTwo(dto.traitTwo);
         spec.setTraitThree(dto.traitThree);
         spec.setTraitFour(dto.traitFour);
-        return spec;
     }
 }

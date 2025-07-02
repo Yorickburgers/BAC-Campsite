@@ -5,7 +5,7 @@ import nl.novi.baccampsite.dtos.ProfessionResponseDto;
 import nl.novi.baccampsite.models.Profession;
 
 public class ProfessionMapper {
-    public static ProfessionResponseDto dto (Profession profession){
+    public static ProfessionResponseDto toProfessionResponseDto (Profession profession) {
         ProfessionResponseDto dto = new ProfessionResponseDto();
         dto.id = profession.getId();
         dto.name = profession.getName();
@@ -19,8 +19,13 @@ public class ProfessionMapper {
         return dto;
     }
 
-    public static Profession toProfession (ProfessionRequestDto dto){
+    public static Profession toProfession (ProfessionRequestDto dto) {
         Profession profession = new Profession();
+        updateProfessionFromDto(dto, profession);
+        return profession;
+    }
+
+    public static void updateProfessionFromDto (ProfessionRequestDto dto, Profession profession) {
         profession.setName(dto.name);
         profession.setDescription(dto.description);
         profession.setHpModifier(dto.hpModifier);
@@ -29,6 +34,5 @@ public class ProfessionMapper {
         profession.setTraitTwo(dto.traitTwo);
         profession.setTraitThree(dto.traitThree);
         profession.setTraitFour(dto.traitFour);
-        return profession;
     }
 }

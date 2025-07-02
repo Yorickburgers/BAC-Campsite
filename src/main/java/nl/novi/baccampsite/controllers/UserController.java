@@ -2,6 +2,7 @@ package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.dtos.UserRequestDto;
 import nl.novi.baccampsite.dtos.UserResponseDto;
+import nl.novi.baccampsite.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,8 +20,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> retrieveUsers() {
-        return ResponseEntity.ok(userService.retrieveUsers());
+    public ResponseEntity<List<UserResponseDto>> retrieveAllUsers() {
+        return ResponseEntity.ok(userService.retrieveAllUsers());
     }
 
     @GetMapping("/{id}")

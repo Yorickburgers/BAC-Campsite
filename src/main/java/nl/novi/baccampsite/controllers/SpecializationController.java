@@ -2,6 +2,7 @@ package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.dtos.SpecializationRequestDto;
 import nl.novi.baccampsite.dtos.SpecializationResponseDto;
+import nl.novi.baccampsite.services.SpecializationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -33,8 +34,8 @@ public class SpecializationController {
     }
 
     @PostMapping("/professions/{professionId}/specializations")
-    public ResponseEntity<SpecializationResponseDto> createSpecialization(@PathVariable Long professionId, @RequestBody SpecializationRequestDto specializationRequestDto) {
-        SpecializationResponseDto specializationResponseDto = specializationService.createSpecialization(professionId, specializationRequestDto);
+    public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@PathVariable Long professionId, @RequestBody SpecializationRequestDto specializationRequestDto) {
+        SpecializationResponseDto specializationResponseDto = specializationService.createSpecializationForProfession(professionId, specializationRequestDto);
 
         URI uri = URI.create(
                 ServletUriComponentsBuilder

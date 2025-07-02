@@ -2,6 +2,7 @@ package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.services.CharacterService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,8 +21,8 @@ public class CharacterController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CharacterResponseDto>> retrieveCharactersByUser() {
-        return ResponseEntity.ok(characterService.retrieveCharactersByUser());
+    public ResponseEntity<List<CharacterResponseDto>> retrieveAllCharacters() {
+        return ResponseEntity.ok(characterService.retrieveAllCharacters());
     }
 
     @GetMapping("/{id}")
@@ -47,7 +48,7 @@ public class CharacterController {
     }
 
     @PutMapping("/{id}/unclaim")
-    public ResponseEntity<CharacterResponseDto> unclaimCharacter(@PathVariable Long id) {
+    public ResponseEntity<String> unclaimCharacter(@PathVariable Long id) {
         return ResponseEntity.ok().body(characterService.unclaimCharacter(id));
     }
 

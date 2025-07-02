@@ -2,6 +2,7 @@ package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.dtos.ProfessionRequestDto;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
+import nl.novi.baccampsite.services.ProfessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,8 +20,8 @@ public class ProfessionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProfessionResponseDto>> retrieveProfessions() {
-        return ResponseEntity.ok(professionService.retrieveProfessions());
+    public ResponseEntity<List<ProfessionResponseDto>> retrieveAllProfessions() {
+        return ResponseEntity.ok(professionService.retrieveAllProfessions());
     }
 
     @GetMapping("/{id}")

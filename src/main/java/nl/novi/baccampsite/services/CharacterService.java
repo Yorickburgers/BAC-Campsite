@@ -63,6 +63,6 @@ public class CharacterService {
     public String deleteCharacter(Long id) {
         Character character = characterRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
         characterRepository.delete(character);
-        return "Character " + id + " has been deleted!";
+        return "Character " + character.getName() + " with id " + id + " has been deleted!";
     }
 }

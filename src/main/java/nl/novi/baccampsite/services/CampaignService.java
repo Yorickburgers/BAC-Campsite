@@ -57,8 +57,8 @@ public class CampaignService {
     }
 
     public String deleteCampaign(Long id) {
-        campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
-        campaignRepository.deleteById(id);
-        return "Campaign " + id + " has been deleted!";
+        Campaign campaign = campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
+        campaignRepository.delete(campaign);
+        return "Campaign " + campaign.getName() + "with id " + id + " has been deleted!";
     }
 }

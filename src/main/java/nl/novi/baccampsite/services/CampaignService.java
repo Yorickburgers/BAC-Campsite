@@ -51,8 +51,7 @@ public class CampaignService {
 
     public CampaignResponseDto updateCampaign(Long id, CampaignRequestDto campaignRequestDto) {
         Campaign currentCampaign = campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
-        currentCampaign.setName(campaignRequestDto.name);
-        currentCampaign.setDescription(campaignRequestDto.description);
+        CampaignMapper.updateCampaignFromDto(campaignRequestDto, currentCampaign);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(currentCampaign));
     }
 

@@ -15,8 +15,12 @@ public class CampaignMapper {
 
     public static Campaign toCampaign(CampaignRequestDto dto) {
         Campaign campaign = new Campaign();
+        updateCampaignFromDto(dto, campaign);
+        return campaign;
+    }
+
+    public static void updateCampaignFromDto(CampaignRequestDto dto, Campaign campaign) {
         campaign.setName(dto.name);
         campaign.setDescription(dto.description);
-        return campaign;
     }
 }

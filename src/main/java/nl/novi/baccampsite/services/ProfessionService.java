@@ -43,6 +43,6 @@ public class ProfessionService {
     public String deleteProfession(Long id) {
         Profession profession = professionRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!"));
         professionRepository.delete(profession);
-        return "Profession " + id + " has been deleted!";
+        return "Profession " + profession.getName() + " with id " + id + " has been deleted!";
     }
 }

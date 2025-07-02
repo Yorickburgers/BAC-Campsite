@@ -2,8 +2,6 @@ package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "professions")
 public class Profession {
@@ -14,16 +12,22 @@ public class Profession {
     private String description;
     private int hpModifier;
     private String primaryAbility;
-    private List<String> traits;
+    private String traitOne;
+    private String traitTwo;
+    private String traitThree;
+    private String traitFour;
 
     public Profession() {}
 
-    public Profession(String name, String description, int hpModifier, String primaryAbility, List<String> traits) {
+    public Profession(String name, String description, int hpModifier, String primaryAbility,  String traitOne, String traitTwo, String traitThree, String traitFour) {
         this.name = name;
         this.description = description;
         this.hpModifier = hpModifier;
         this.primaryAbility = primaryAbility;
-        this.traits = traits;
+        this.traitOne = traitOne;
+        this.traitTwo = traitTwo;
+        this.traitThree = traitThree;
+        this.traitFour = traitFour;
     }
 
     public Long getId() {
@@ -62,11 +66,35 @@ public class Profession {
         this.primaryAbility = primaryAbility;
     }
 
-    public List<String> getTraits() {
-        return traits;
+    public String getTraitOne() {
+        return traitOne;
     }
 
-    public void setTraits(List<String> traits) {
-        this.traits = traits;
+    public void setTraitOne(String traitOne) {
+        this.traitOne = traitOne;
+    }
+
+    public String getTraitTwo() {
+        return traitTwo;
+    }
+
+    public void setTraitTwo(String traitTwo) {
+        this.traitTwo = traitTwo;
+    }
+
+    public String getTraitThree() {
+        return traitThree;
+    }
+
+    public void setTraitThree(String traitThree) {
+        this.traitThree = traitThree;
+    }
+
+    public String getTraitFour() {
+        return traitFour;
+    }
+
+    public void setTraitFour(String traitFour) {
+        this.traitFour = traitFour;
     }
 }

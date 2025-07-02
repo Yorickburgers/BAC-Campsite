@@ -16,9 +16,13 @@ public class UserMapper {
 
     public static User toUser(UserRequestDto dto) {
         User user = new User();
+        updateUserFromDto(dto, user);
+        return user;
+    }
+
+    public static void updateUserFromDto(UserRequestDto dto, User user) {
         user.setUsername(dto.username);
         user.setPassword(dto.password);
         user.setEmail(dto.email);
-        return user;
     }
 }

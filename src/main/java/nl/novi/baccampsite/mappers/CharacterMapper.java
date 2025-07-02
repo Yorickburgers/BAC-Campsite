@@ -24,6 +24,11 @@ public class CharacterMapper {
 
     public static Character toCharacter (CharacterRequestDto dto) {
         Character character = new Character();
+        updateCharacterFromDto(dto, character);
+        return character;
+    }
+
+    public static void updateCharacterFromDto(CharacterRequestDto dto, Character character) {
         character.setName(dto.name);
         character.setBackstory(dto.backstory);
         character.setSpecies(dto.species);
@@ -35,6 +40,5 @@ public class CharacterMapper {
         character.setIntelligence(dto.intelligence);
         character.setWisdom(dto.wisdom);
         character.setCharisma(dto.charisma);
-        return character;
     }
 }

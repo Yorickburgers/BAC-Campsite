@@ -32,6 +32,10 @@ public class Character {
     @JoinColumn(name = "specialization_id", referencedColumnName = "id")
     private Specialization specialization;
 
+    @ManyToOne
+    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
+    private Campaign campaign;
+
     public Character() {}
 
     public Character(String name, String backstory, String species, int level, int hpTotal, int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) {

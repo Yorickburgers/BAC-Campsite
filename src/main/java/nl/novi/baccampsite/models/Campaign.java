@@ -2,6 +2,9 @@ package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "campaigns")
 public class Campaign {
@@ -10,6 +13,9 @@ public class Campaign {
     private Long id;
     private String name;
     private String description;
+
+    @OneToMany(mappedBy = "campaign")
+    private List<Character> characters = new ArrayList<>();
 
     public Campaign() {}
 
@@ -36,5 +42,13 @@ public class Campaign {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Character> getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(List<Character> characters) {
+        this.characters = characters;
     }
 }

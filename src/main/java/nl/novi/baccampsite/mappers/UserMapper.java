@@ -17,7 +17,7 @@ public class UserMapper {
         dto.characters = new ArrayList<>();
 
                 user.getCharacters().forEach(character ->
-            dto.characters.add(CharacterMapper.toCharacterResponseDto(character)));
+            dto.characters.add(CharacterMapper.toCharacterSummaryDto(character)));
         return dto;
     }
 

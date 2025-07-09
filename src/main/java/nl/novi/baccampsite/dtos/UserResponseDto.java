@@ -8,5 +8,5 @@ public class UserResponseDto {
     public String username;
     public String password;
     public String email;
-    public List<CharacterResponseDto> characters = new ArrayList<>();
+    public List<CharacterSummaryDto> characters = new ArrayList<>();
 }

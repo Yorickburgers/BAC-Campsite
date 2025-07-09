@@ -57,9 +57,9 @@ public class CharacterController {
 //        return ResponseEntity.ok().body(characterService.claimCharacter(id));
 //    }
 
-    @PutMapping("/{id}/specialize")
-    public ResponseEntity<String> specializeCharacter(@PathVariable Long id) {
-        return ResponseEntity.ok().body(characterService.specializeCharacter(id));
+    @PutMapping("/{charId}/specialize/{specId}")
+    public ResponseEntity<CharacterResponseDto> specializeCharacter(@PathVariable Long charId, @PathVariable Long specId) {
+        return ResponseEntity.ok().body(characterService.specializeCharacter(charId, specId));
     }
 
     @DeleteMapping("/{id}")

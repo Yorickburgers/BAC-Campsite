@@ -15,6 +15,10 @@ public class Specialization {
     private String traitThree;
     private String traitFour;
 
+    @ManyToOne
+    @JoinColumn(name = "profession_id")
+    private Profession profession;
+
     public Specialization() {}
 
     public Specialization(String name, String description,  String traitOne, String traitTwo, String traitThree, String traitFour) {
@@ -76,5 +80,13 @@ public class Specialization {
 
     public void setTraitFour(String traitFour) {
         this.traitFour = traitFour;
+    }
+
+    public Profession getProfession() {
+        return profession;
+    }
+
+    public void setProfession(Profession profession) {
+        this.profession = profession;
     }
 }

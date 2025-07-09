@@ -2,6 +2,7 @@ package nl.novi.baccampsite.services;
 
 import nl.novi.baccampsite.dtos.SpecializationRequestDto;
 import nl.novi.baccampsite.dtos.SpecializationResponseDto;
+import nl.novi.baccampsite.dtos.SpecializationSummaryDto;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.mappers.SpecializationMapper;
 import nl.novi.baccampsite.models.Profession;
@@ -23,9 +24,9 @@ public class SpecializationService {
         this.professionRepository = professionRepository;
     }
 
-    public List<SpecializationResponseDto> retrieveSpecializationsByProfession(Long id) {
-        List<SpecializationResponseDto> specializations = new ArrayList<>();
-        specializationRepository.findAllByProfessionId(id).forEach(specialization -> specializations.add(SpecializationMapper.toSpecializationResponseDto(specialization)));
+    public List<SpecializationSummaryDto> retrieveSpecializationsByProfession(Long id) {
+        List<SpecializationSummaryDto> specializations = new ArrayList<>();
+        specializationRepository.findAllByProfessionId(id).forEach(specialization -> specializations.add(SpecializationMapper.toSpecializationSummaryDto(specialization)));
         return specializations;
     }
 

@@ -1,5 +1,7 @@
 package nl.novi.baccampsite.dtos;
 
+import java.util.List;
+
 public class ProfessionResponseDto {
     public Long id;
     public String name;
@@ -10,5 +12,5 @@ public class ProfessionResponseDto {
     public String traitTwo;
     public String traitThree;
     public String traitFour;
-    public SpecializationResponseDto specialization;
+    public List<SpecializationSummaryDto> specializations;
 }

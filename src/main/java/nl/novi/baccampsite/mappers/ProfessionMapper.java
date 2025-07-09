@@ -5,6 +5,8 @@ import nl.novi.baccampsite.dtos.ProfessionResponseDto;
 import nl.novi.baccampsite.dtos.ProfessionSummaryDto;
 import nl.novi.baccampsite.models.Profession;
 
+import java.util.ArrayList;
+
 public class ProfessionMapper {
     public static ProfessionResponseDto toProfessionResponseDto (Profession profession) {
         ProfessionResponseDto dto = new ProfessionResponseDto();
@@ -17,6 +19,9 @@ public class ProfessionMapper {
         dto.traitTwo = profession.getTraitTwo();
         dto.traitThree = profession.getTraitThree();
         dto.traitFour = profession.getTraitFour();
+        dto.specializations = new ArrayList<>();
+            profession.getSpecializations().forEach(specialization ->
+                    dto.specializations.add(SpecializationMapper.toSpecializationSummaryDto(specialization)));
         return dto;
     }
 

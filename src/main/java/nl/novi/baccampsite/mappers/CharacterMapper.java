@@ -2,9 +2,9 @@ package nl.novi.baccampsite.mappers;
 
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.dtos.CharacterSummaryDto;
 import nl.novi.baccampsite.models.Character;
 import nl.novi.baccampsite.models.Profession;
-import nl.novi.baccampsite.repositories.ProfessionRepository;
 
 public class CharacterMapper {
     public static CharacterResponseDto toCharacterResponseDto (Character character) {
@@ -22,7 +22,9 @@ public class CharacterMapper {
         dto.wisdom = character.getWisdom();
         dto.charisma = character.getCharisma();
         dto.profession = ProfessionMapper.toProfessionSummaryDto(character.getProfession());
-        dto.specialization = SpecializationMapper.toSpecializationSummaryDto(character.getSpecialization());
+        if (character.getSpecialization() != null) {
+            dto.specialization = SpecializationMapper.toSpecializationSummaryDto(character.getSpecialization());
+        }
         return dto;
     }
 
@@ -30,6 +32,19 @@ public class CharacterMapper {
         Character character = new Character();
         updateCharacterFromDto(dto, character, profession);
         return character;
+    }
+
+    public static CharacterSummaryDto toCharacterSummaryDto (Character character) {
+        CharacterSummaryDto dto = new CharacterSummaryDto();
+        dto.id = character.getId();
+        dto.name = character.getName();
+        dto.species = character.getSpecies();
+        dto.level = character.getLevel();
+        dto.profession = ProfessionMapper.toProfessionSummaryDto(character.getProfession());
+        if (character.getSpecialization() != null) {
+            dto.specialization = SpecializationMapper.toSpecializationSummaryDto(character.getSpecialization());
+        }
+        return dto;
     }
 
     public static void updateCharacterFromDto(CharacterRequestDto dto, Character character, Profession profession) {

@@ -2,6 +2,7 @@ package nl.novi.baccampsite.mappers;
 
 import nl.novi.baccampsite.dtos.SpecializationRequestDto;
 import nl.novi.baccampsite.dtos.SpecializationResponseDto;
+import nl.novi.baccampsite.dtos.SpecializationSummaryDto;
 import nl.novi.baccampsite.models.Profession;
 import nl.novi.baccampsite.models.Specialization;
 
@@ -22,6 +23,13 @@ public class SpecializationMapper {
         Specialization spec = new Specialization();
         updateSpecializationFromDto(dto, spec, profession);
         return spec;
+    }
+
+    public static SpecializationSummaryDto toSpecializationSummaryDto (Specialization spec) {
+        SpecializationSummaryDto dto = new SpecializationSummaryDto();
+        dto.id = spec.getId();
+        dto.name = spec.getName();
+        return dto;
     }
 
     public static void updateSpecializationFromDto (SpecializationRequestDto dto, Specialization spec, Profession profession) {

@@ -2,6 +2,7 @@ package nl.novi.baccampsite.mappers;
 
 import nl.novi.baccampsite.dtos.ProfessionRequestDto;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
+import nl.novi.baccampsite.dtos.ProfessionSummaryDto;
 import nl.novi.baccampsite.models.Profession;
 
 public class ProfessionMapper {
@@ -23,6 +24,13 @@ public class ProfessionMapper {
         Profession profession = new Profession();
         updateProfessionFromDto(dto, profession);
         return profession;
+    }
+
+    public static ProfessionSummaryDto toProfessionSummaryDto (Profession profession) {
+        ProfessionSummaryDto dto = new ProfessionSummaryDto();
+        dto.id = profession.getId();
+        dto.name = profession.getName();
+        return dto;
     }
 
     public static void updateProfessionFromDto (ProfessionRequestDto dto, Profession profession) {

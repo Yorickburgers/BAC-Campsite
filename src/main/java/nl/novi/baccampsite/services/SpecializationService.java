@@ -23,11 +23,11 @@ public class SpecializationService {
         this.professionRepository = professionRepository;
     }
 
-//    public List<SpecializationResponseDto> retrieveSpecializationsByProfession(Long id) {
-//        List<SpecializationResponseDto> specializations = new ArrayList<>();
-//        specializationRepository.findAllByProfessionId(id).forEach(specialization -> specializations.add(SpecializationMapper.toSpecializationResponseDto(specialization)));
-//        return specializations;
-//    }
+    public List<SpecializationResponseDto> retrieveSpecializationsByProfession(Long id) {
+        List<SpecializationResponseDto> specializations = new ArrayList<>();
+        specializationRepository.findAllByProfessionId(id).forEach(specialization -> specializations.add(SpecializationMapper.toSpecializationResponseDto(specialization)));
+        return specializations;
+    }
 
     public List<SpecializationResponseDto> retrieveAllSpecializations() {
         List<SpecializationResponseDto> specializations = new ArrayList<>();

@@ -10,4 +10,5 @@ public class ProfessionResponseDto {
     public String traitTwo;
     public String traitThree;
     public String traitFour;
+    public SpecializationResponseDto specialization;
 }

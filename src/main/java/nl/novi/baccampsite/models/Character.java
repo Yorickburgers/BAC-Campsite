@@ -20,6 +20,9 @@ public class Character {
     private int wisdom;
     private int charisma;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
+
     public Character() {}
 
     public Character(String name, String backstory, String species, int level, int hpTotal, int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) {

@@ -21,7 +21,8 @@ public class CharacterMapper {
         dto.intelligence = character.getIntelligence();
         dto.wisdom = character.getWisdom();
         dto.charisma = character.getCharisma();
-        dto.profession = ProfessionMapper.toProfessionResponseDto(character.getProfession());
+        dto.profession = ProfessionMapper.toProfessionSummaryDto(character.getProfession());
+        dto.specialization = SpecializationMapper.toSpecializationSummaryDto(character.getSpecialization());
         return dto;
     }
 

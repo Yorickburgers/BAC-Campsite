@@ -155,4 +155,12 @@ public class Character {
     public void setProfession(Profession profession) {
         this.profession = profession;
     }
+
+    public Specialization getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
+    }
 }

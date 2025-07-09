@@ -9,8 +9,10 @@ import nl.novi.baccampsite.mappers.CampaignMapper;
 import nl.novi.baccampsite.mappers.CharacterMapper;
 import nl.novi.baccampsite.models.Campaign;
 import nl.novi.baccampsite.models.Character;
+import nl.novi.baccampsite.models.Profession;
 import nl.novi.baccampsite.repositories.CampaignRepository;
 import nl.novi.baccampsite.repositories.CharacterRepository;
+import nl.novi.baccampsite.repositories.ProfessionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,10 +22,12 @@ import java.util.List;
 public class CampaignService {
     private final CampaignRepository campaignRepository;
     private final CharacterRepository characterRepository;
+    private final ProfessionRepository professionRepository;
 
-    public CampaignService(CampaignRepository campaignRepository, CharacterRepository characterRepository) {
+    public CampaignService(CampaignRepository campaignRepository, CharacterRepository characterRepository, ProfessionRepository professionRepository) {
         this.campaignRepository = campaignRepository;
         this.characterRepository = characterRepository;
+        this.professionRepository = professionRepository;
     }
 
     public List<CampaignResponseDto> retrieveAllCampaigns() {
@@ -42,8 +46,11 @@ public class CampaignService {
     }
 
     public CharacterResponseDto createCharacterForCampaign(Long id, CharacterRequestDto characterRequestDto) {
-        Campaign campaign = campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
-        Character character = CharacterMapper.toCharacter(characterRequestDto);
+        Campaign campaign = campaignRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
+        Profession profession = professionRepository.findById(characterRequestDto.professionId)
+                .orElseThrow(() -> new RecordNotFoundException("Profession " + characterRequestDto.professionId + " not found!"));
+        Character character = CharacterMapper.toCharacter(characterRequestDto, profession);
         character.setUser(null);
         character.setCampaign(campaign);
         return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));

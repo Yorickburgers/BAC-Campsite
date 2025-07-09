@@ -20,6 +20,22 @@ public class Character {
     private int wisdom;
     private int charisma;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "profession_id", referencedColumnName = "id", nullable = false)
+    private Profession profession;
+
+    @ManyToOne
+    @JoinColumn(name = "specialization_id", referencedColumnName = "id")
+    private Specialization specialization;
+
+    @ManyToOne
+    @JoinColumn(name = "campaign_id", referencedColumnName = "id")
+    private Campaign campaign;
+
     public Character() {}
 
     public Character(String name, String backstory, String species, int level, int hpTotal, int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) {
@@ -126,5 +142,37 @@ public class Character {
 
     public void setCharisma(int charisma) {
         this.charisma = charisma;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Profession getProfession() {
+        return profession;
+    }
+
+    public void setProfession(Profession profession) {
+        this.profession = profession;
+    }
+
+    public Specialization getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(Specialization specialization) {
+        this.specialization = specialization;
+    }
+
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
     }
 }

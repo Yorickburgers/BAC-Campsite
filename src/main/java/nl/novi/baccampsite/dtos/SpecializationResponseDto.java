@@ -8,4 +8,5 @@ public class SpecializationResponseDto {
     public String traitTwo;
     public String traitThree;
     public String traitFour;
+    public ProfessionSummaryDto profession;
 }

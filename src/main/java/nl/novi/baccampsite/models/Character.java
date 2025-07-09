@@ -167,4 +167,12 @@ public class Character {
     public void setSpecialization(Specialization specialization) {
         this.specialization = specialization;
     }
+
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
+    }
 }

@@ -22,8 +22,14 @@ public class CharacterMapper {
         dto.wisdom = character.getWisdom();
         dto.charisma = character.getCharisma();
         dto.profession = ProfessionMapper.toProfessionSummaryDto(character.getProfession());
+        if (character.getUser() != null) {
+            dto.user = UserMapper.toUserResponseDto(character.getUser());
+        }
         if (character.getSpecialization() != null) {
             dto.specialization = SpecializationMapper.toSpecializationSummaryDto(character.getSpecialization());
+        }
+        if (character.getCampaign() != null) {
+            dto.campaign = CampaignMapper.toCampaignResponseDto(character.getCampaign());
         }
         return dto;
     }

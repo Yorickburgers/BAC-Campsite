@@ -52,7 +52,7 @@ public class CampaignService {
                 .orElseThrow(() -> new RecordNotFoundException("Profession " + characterRequestDto.professionId + " not found!"));
         Character character = CharacterMapper.toCharacter(characterRequestDto, profession);
         character.setUser(null);
-        //character.setCampaign(campaign);
+        character.setCampaign(campaign);
         return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
     }
 

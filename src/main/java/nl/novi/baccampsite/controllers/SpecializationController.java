@@ -33,7 +33,7 @@ public class SpecializationController {
         return ResponseEntity.ok(specializationService.retrieveSpecialization(id));
     }
 
-    @PostMapping("/professions/{professionId}/specializations")
+    @PostMapping("/specializations")
     public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@RequestBody SpecializationRequestDto specializationRequestDto) {
         SpecializationResponseDto specializationResponseDto = specializationService.createSpecialization(specializationRequestDto);
 

@@ -47,8 +47,11 @@ public class SpecializationService {
     }
 
     public SpecializationResponseDto updateSpecialization(Long id, SpecializationRequestDto specializationRequestDto) {
-        Specialization currentSpec = specializationRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Specialization " + id + " not found!"));
-        SpecializationMapper.updateSpecializationFromDto(specializationRequestDto, currentSpec);
+        Specialization currentSpec = specializationRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Specialization " + id + " not found!"));
+        Profession profession = professionRepository.findById(specializationRequestDto.professionId)
+                .orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!"));
+        SpecializationMapper.updateSpecializationFromDto(specializationRequestDto, currentSpec, profession);
         return SpecializationMapper.toSpecializationResponseDto(specializationRepository.save(currentSpec));
     }
 

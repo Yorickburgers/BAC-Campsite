@@ -34,8 +34,8 @@ public class SpecializationController {
     }
 
     @PostMapping("/professions/{professionId}/specializations")
-    public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@PathVariable Long professionId, @RequestBody SpecializationRequestDto specializationRequestDto) {
-        SpecializationResponseDto specializationResponseDto = specializationService.createSpecializationForProfession(professionId, specializationRequestDto);
+    public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@RequestBody SpecializationRequestDto specializationRequestDto) {
+        SpecializationResponseDto specializationResponseDto = specializationService.createSpecialization(specializationRequestDto);
 
         URI uri = URI.create(
                 ServletUriComponentsBuilder

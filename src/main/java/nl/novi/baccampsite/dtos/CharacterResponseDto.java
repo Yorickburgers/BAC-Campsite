@@ -13,5 +13,6 @@ public class CharacterResponseDto {
     public int intelligence;
     public int wisdom;
     public int charisma;
-    public ProfessionResponseDto profession;
+    public ProfessionSummaryDto profession;
+    public SpecializationSummaryDto specialization;
 }

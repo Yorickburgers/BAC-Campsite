@@ -24,6 +24,10 @@ public class Character {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "profession_id", referencedColumnName = "id", nullable = false)
+    private Profession profession;
+
     public Character() {}
 
     public Character(String name, String backstory, String species, int level, int hpTotal, int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma) {
@@ -138,5 +142,13 @@ public class Character {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Profession getProfession() {
+        return profession;
+    }
+
+    public void setProfession(Profession profession) {
+        this.profession = profession;
     }
 }

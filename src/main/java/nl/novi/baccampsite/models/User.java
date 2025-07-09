@@ -2,6 +2,7 @@ package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class User {
     private String email;
 
     @OneToMany(mappedBy = "user")
-    private List<Character> characters;
+    private List<Character> characters =  new ArrayList<>();
 
     public User() {}
 

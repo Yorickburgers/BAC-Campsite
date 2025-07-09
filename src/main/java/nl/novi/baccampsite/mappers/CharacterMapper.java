@@ -3,6 +3,8 @@ package nl.novi.baccampsite.mappers;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import nl.novi.baccampsite.models.Character;
+import nl.novi.baccampsite.models.Profession;
+import nl.novi.baccampsite.repositories.ProfessionRepository;
 
 public class CharacterMapper {
     public static CharacterResponseDto toCharacterResponseDto (Character character) {
@@ -19,17 +21,17 @@ public class CharacterMapper {
         dto.intelligence = character.getIntelligence();
         dto.wisdom = character.getWisdom();
         dto.charisma = character.getCharisma();
-        dto.profession = character.getProfession();
+        dto.profession = ProfessionMapper.toProfessionResponseDto(character.getProfession());
         return dto;
     }
 
-    public static Character toCharacter (CharacterRequestDto dto) {
+    public static Character toCharacter (CharacterRequestDto dto, Profession profession) {
         Character character = new Character();
-        updateCharacterFromDto(dto, character);
+        updateCharacterFromDto(dto, character, profession);
         return character;
     }
 
-    public static void updateCharacterFromDto(CharacterRequestDto dto, Character character) {
+    public static void updateCharacterFromDto(CharacterRequestDto dto, Character character, Profession profession) {
         character.setName(dto.name);
         character.setBackstory(dto.backstory);
         character.setSpecies(dto.species);
@@ -41,6 +43,6 @@ public class CharacterMapper {
         character.setIntelligence(dto.intelligence);
         character.setWisdom(dto.wisdom);
         character.setCharisma(dto.charisma);
-        character.setProfession(dto.profession);
+        character.setProfession(profession);
     }
 }

@@ -21,6 +21,7 @@ public class Character {
     private int charisma;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Character() {}
@@ -129,5 +130,13 @@ public class Character {
 
     public void setCharisma(int charisma) {
         this.charisma = charisma;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

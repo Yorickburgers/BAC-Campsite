@@ -58,4 +58,12 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public List<Character> getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(List<Character> characters) {
+        this.characters = characters;
+    }
 }

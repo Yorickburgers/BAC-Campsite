@@ -16,6 +16,7 @@ public class SpecializationMapper {
         dto.traitTwo = spec.getTraitTwo();
         dto.traitThree = spec.getTraitThree();
         dto.traitFour = spec.getTraitFour();
+        dto.profession = ProfessionMapper.toProfessionSummaryDto(spec.getProfession());
         return dto;
     }
 

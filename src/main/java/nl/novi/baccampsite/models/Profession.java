@@ -2,6 +2,9 @@ package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "professions")
 public class Profession {
@@ -16,6 +19,9 @@ public class Profession {
     private String traitTwo;
     private String traitThree;
     private String traitFour;
+
+    @OneToMany(mappedBy = "profession", fetch = FetchType.EAGER)
+    private List<Specialization> specializations = new ArrayList<>();
 
     public Profession() {}
 
@@ -96,5 +102,13 @@ public class Profession {
 
     public void setTraitFour(String traitFour) {
         this.traitFour = traitFour;
+    }
+
+    public List<Specialization> getSpecializations() {
+        return specializations;
+    }
+
+    public void setSpecializations(List<Specialization> specializations) {
+        this.specializations = specializations;
     }
 }

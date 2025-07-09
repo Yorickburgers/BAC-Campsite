@@ -57,6 +57,11 @@ public class CharacterController {
 //        return ResponseEntity.ok().body(characterService.claimCharacter(id));
 //    }
 
+    @PutMapping("/{id}/specialize")
+    public ResponseEntity<String> specializeCharacter(@PathVariable Long id) {
+        return ResponseEntity.ok().body(characterService.specializeCharacter(id));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCharacter(@PathVariable Long id) {
         return ResponseEntity.ok(characterService.deleteCharacter(id));

@@ -39,10 +39,10 @@ public class SpecializationService {
         return SpecializationMapper.toSpecializationResponseDto(specializationRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Specialization " + id + " not found!")));
     }
 
-    public SpecializationResponseDto createSpecializationForProfession(Long id, SpecializationRequestDto specializationRequestDto) {
-        Specialization specialization = SpecializationMapper.toSpecialization(specializationRequestDto);
-        Profession profession = professionRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!"));
-//        specialization.setProfession(profession);
+    public SpecializationResponseDto createSpecialization(SpecializationRequestDto specializationRequestDto) {
+        Profession profession = professionRepository.findById(specializationRequestDto.professionId)
+                .orElseThrow(() -> new RecordNotFoundException("Profession " + specializationRequestDto.professionId + " not found!"));
+        Specialization specialization = SpecializationMapper.toSpecialization(specializationRequestDto, profession);
         return SpecializationMapper.toSpecializationResponseDto(specializationRepository.save(specialization));
     }
 

@@ -1,7 +1,5 @@
 package nl.novi.baccampsite.dtos;
 
-import nl.novi.baccampsite.models.Campaign;
-
 import java.util.ArrayList;
 import java.util.List;
 

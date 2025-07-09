@@ -1,6 +1,5 @@
 package nl.novi.baccampsite.mappers;
 
-import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import nl.novi.baccampsite.dtos.UserRequestDto;
 import nl.novi.baccampsite.dtos.UserResponseDto;
 import nl.novi.baccampsite.models.User;

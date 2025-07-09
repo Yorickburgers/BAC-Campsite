@@ -19,6 +19,7 @@ public class CharacterMapper {
         dto.intelligence = character.getIntelligence();
         dto.wisdom = character.getWisdom();
         dto.charisma = character.getCharisma();
+        dto.profession = character.getProfession();
         return dto;
     }
 
@@ -40,5 +41,6 @@ public class CharacterMapper {
         character.setIntelligence(dto.intelligence);
         character.setWisdom(dto.wisdom);
         character.setCharisma(dto.charisma);
+        character.setProfession(dto.profession);
     }
 }

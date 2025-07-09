@@ -5,4 +5,6 @@ public class CharacterSummaryDto {
     public String name;
     public String species;
     public int level;
+    public ProfessionSummaryDto profession;
+    public SpecializationSummaryDto specialization;
 }

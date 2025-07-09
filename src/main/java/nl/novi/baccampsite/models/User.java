@@ -24,6 +24,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Character> characters =  new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Campaign> campaigns = new ArrayList<>();
+
     public User() {}
 
     public User(String username, String password, String email) {
@@ -66,5 +69,13 @@ public class User {
 
     public void setCharacters(List<Character> characters) {
         this.characters = characters;
+    }
+
+    public List<Campaign> getCampaigns() {
+        return campaigns;
+    }
+
+    public void setCampaigns(List<Campaign> campaigns) {
+        this.campaigns = campaigns;
     }
 }

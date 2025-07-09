@@ -7,4 +7,5 @@ public class SpecializationRequestDto {
     public String traitTwo;
     public String traitThree;
     public String traitFour;
+    public Long professionId;
 }

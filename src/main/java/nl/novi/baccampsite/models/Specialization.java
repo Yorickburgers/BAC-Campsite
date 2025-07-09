@@ -16,7 +16,7 @@ public class Specialization {
     private String traitFour;
 
     @ManyToOne
-    @JoinColumn(name = "profession_id")
+    @JoinColumn(name = "profession_id", nullable = false)
     private Profession profession;
 
     public Specialization() {}

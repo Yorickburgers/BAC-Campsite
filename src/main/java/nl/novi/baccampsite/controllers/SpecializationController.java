@@ -18,10 +18,10 @@ public class SpecializationController {
         this.specializationService = specializationService;
     }
 
-    @GetMapping("/professions/{professionId}/specializations")
-    public ResponseEntity<List<SpecializationResponseDto>> retrieveSpecializationsByProfession(@PathVariable Long professionId) {
-        return ResponseEntity.ok(specializationService.retrieveSpecializationsByProfession(professionId));
-    }
+//    @GetMapping("/professions/{professionId}/specializations")
+//    public ResponseEntity<List<SpecializationResponseDto>> retrieveSpecializationsByProfession(@PathVariable Long professionId) {
+//        return ResponseEntity.ok(specializationService.retrieveSpecializationsByProfession(professionId));
+//    }
 
     @GetMapping("/specializations")
     public ResponseEntity<List<SpecializationResponseDto>> retrieveAllSpecializations() {

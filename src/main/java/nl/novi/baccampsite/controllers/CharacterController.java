@@ -52,10 +52,10 @@ public class CharacterController {
         return ResponseEntity.ok().body(characterService.unclaimCharacter(id));
     }
 
-    @PutMapping("/{id}/claim")
-    public ResponseEntity<CharacterResponseDto> claimCharacter(@PathVariable Long id) {
-        return ResponseEntity.ok().body(characterService.claimCharacter(id));
-    }
+//    @PutMapping("/{id}/claim")
+//    public ResponseEntity<CharacterResponseDto> claimCharacter(@PathVariable Long id) {
+//        return ResponseEntity.ok().body(characterService.claimCharacter(id));
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCharacter(@PathVariable Long id) {

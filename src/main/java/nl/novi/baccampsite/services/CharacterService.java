@@ -59,18 +59,18 @@ public class CharacterService {
         return "Character " + id + " has been unclaimed!";
     }
 
-    public CharacterResponseDto claimCharacter(Long id) {
-        Character character = characterRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
-        if (character.getUser() != null) {
-            throw new IllegalStateException("Character is already claimed");
-        }
-
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        User user = userRepository.findByUsername(auth.getName());
-        character.setUser(user); // from loggedIn user, TODO
-        return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
-    }
+//    public CharacterResponseDto claimCharacter(Long id) {
+//        Character character = characterRepository.findById(id)
+//                .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
+//        if (character.getUser() != null) {
+//            throw new IllegalStateException("Character is already claimed");
+//        }
+//
+////        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+////        User user = userRepository.findByUsername(auth.getName());
+//        character.setUser(user); // from loggedIn user, TODO
+//        return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
+//    }
 
     public String deleteCharacter(Long id) {
         Character character = characterRepository.findById(id)

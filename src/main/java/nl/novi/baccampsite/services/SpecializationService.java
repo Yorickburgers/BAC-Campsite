@@ -23,11 +23,11 @@ public class SpecializationService {
         this.professionRepository = professionRepository;
     }
 
-    public List<SpecializationResponseDto> retrieveSpecializationsByProfession(Long id) {
-        List<SpecializationResponseDto> specializations = new ArrayList<>();
-        specializationRepository.findAllByProfessionId(id).forEach(specialization -> specializations.add(SpecializationMapper.toSpecializationResponseDto(specialization)));
-        return specializations;
-    }
+//    public List<SpecializationResponseDto> retrieveSpecializationsByProfession(Long id) {
+//        List<SpecializationResponseDto> specializations = new ArrayList<>();
+//        specializationRepository.findAllByProfessionId(id).forEach(specialization -> specializations.add(SpecializationMapper.toSpecializationResponseDto(specialization)));
+//        return specializations;
+//    }
 
     public List<SpecializationResponseDto> retrieveAllSpecializations() {
         List<SpecializationResponseDto> specializations = new ArrayList<>();
@@ -42,7 +42,7 @@ public class SpecializationService {
     public SpecializationResponseDto createSpecializationForProfession(Long id, SpecializationRequestDto specializationRequestDto) {
         Specialization specialization = SpecializationMapper.toSpecialization(specializationRequestDto);
         Profession profession = professionRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!"));
-        specialization.setProfession(profession);
+//        specialization.setProfession(profession);
         return SpecializationMapper.toSpecializationResponseDto(specializationRepository.save(specialization));
     }
 

@@ -5,4 +5,5 @@ public class UserResponseDto {
     public String username;
     public String password;
     public String email;
+
 }

@@ -21,7 +21,7 @@ public class Character {
     private int charisma;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "username")
     private User user;
 
     @ManyToOne

@@ -24,9 +24,9 @@ public class UserController {
         return ResponseEntity.ok(userService.retrieveAllUsers());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto>  retrieveUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.retrieveUser(id));
+    @GetMapping("/{username}")
+    public ResponseEntity<UserResponseDto>  retrieveUser(@PathVariable String username) {
+        return ResponseEntity.ok(userService.retrieveUser(username));
     }
 
     @PostMapping
@@ -36,18 +36,18 @@ public class UserController {
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
-                        .path("/" + userResponseDto.id).toUriString());
+                        .path("/" + userResponseDto.username).toUriString());
 
         return ResponseEntity.created(uri).body(userResponseDto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDto>  updateUser(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.ok().body(userService.updateUser(id, userRequestDto));
+    @PutMapping("/{username}")
+    public ResponseEntity<UserResponseDto>  updateUser(@PathVariable String username, @RequestBody UserRequestDto userRequestDto) {
+        return ResponseEntity.ok().body(userService.updateUser(username, userRequestDto));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.deleteUser(id));
+    @DeleteMapping("/{username}")
+    public ResponseEntity<String> deleteUser(@PathVariable String username) {
+        return ResponseEntity.ok(userService.deleteUser(username));
     }
 }

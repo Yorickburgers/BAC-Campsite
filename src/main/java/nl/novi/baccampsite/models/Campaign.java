@@ -17,6 +17,10 @@ public class Campaign {
     @OneToMany(mappedBy = "campaign")
     private List<Character> characters = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "username")
+    private User user;
+
     public Campaign() {}
 
     public Campaign(String name, String description) {

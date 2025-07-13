@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class UserMapper {
     public static UserResponseDto toUserResponseDto(User user) {
         UserResponseDto dto = new UserResponseDto();
-        dto.id = user.getId();
         dto.username = user.getUsername();
         dto.password = user.getPassword();
         dto.email = user.getEmail();

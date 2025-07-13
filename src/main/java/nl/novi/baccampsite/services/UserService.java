@@ -25,8 +25,8 @@ public class UserService {
         return users;
     }
 
-    public UserResponseDto retrieveUser(Long id) {
-        return UserMapper.toUserResponseDto(userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("User " + id + " not found!")));
+    public UserResponseDto retrieveUser(String username) {
+        return UserMapper.toUserResponseDto(userRepository.findById(username).orElseThrow(() -> new RecordNotFoundException("User " + username + " not found!")));
     }
 
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
@@ -34,15 +34,15 @@ public class UserService {
         return UserMapper.toUserResponseDto(userRepository.save(user));
     }
 
-    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto) {
-        User currentUser = userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("User " + id + " not found!"));
+    public UserResponseDto updateUser(String username, UserRequestDto userRequestDto) {
+        User currentUser = userRepository.findById(username).orElseThrow(() -> new RecordNotFoundException("User " + username + " not found!"));
         UserMapper.updateUserFromDto(userRequestDto, currentUser);
         return UserMapper.toUserResponseDto(userRepository.save(currentUser));
     }
 
-    public String deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("User " + id + " not found!"));
+    public String deleteUser(String username) {
+        User user = userRepository.findById(username).orElseThrow(() -> new RecordNotFoundException("User " + username + " not found!"));
         userRepository.delete(user);
-        return "User " + user.getUsername() + " with id " + " has been deleted!";
+        return "User " + user.getUsername() + " has been deleted!";
     }
 }

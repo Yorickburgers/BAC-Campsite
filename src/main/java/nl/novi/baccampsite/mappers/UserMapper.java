@@ -18,6 +18,7 @@ public class UserMapper {
         dto.campaigns = new ArrayList<>();
             user.getCampaigns().forEach(campaign ->
                 dto.campaigns.add(CampaignMapper.toCampaignResponseDto(campaign)));
+            dto.authorities = user.getAuthorities();
         return dto;
     }
 

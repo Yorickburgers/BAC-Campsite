@@ -61,7 +61,7 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUser(username));
     }
 
-    @GetMapping("/{username}/authorities")
+    @PutMapping("/{username}/authorities")
     public ResponseEntity<String> addUserAuthority(@PathVariable String username, @RequestBody Map<String, Object> fields) {
         try {
             String authorityName = (String) fields.get("authority");

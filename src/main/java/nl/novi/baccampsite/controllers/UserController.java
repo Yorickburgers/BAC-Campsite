@@ -4,10 +4,12 @@ import nl.novi.baccampsite.dtos.UserRequestDto;
 import nl.novi.baccampsite.dtos.UserResponseDto;
 import nl.novi.baccampsite.services.UserService;
 import nl.novi.baccampsite.exceptions.BadRequestException;
+import nl.novi.baccampsite.utils.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.context.support.SecurityWebApplicationContextUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -52,13 +54,22 @@ public class UserController {
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<UserResponseDto>  updateUser(@PathVariable String username, @RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.ok().body(userService.updateUser(username, userRequestDto));
+    public ResponseEntity<UserResponseDto>  updateUser(@PathVariable String username, @RequestBody UserRequestDto userRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails.getUsername().equals(username)) {
+            return ResponseEntity.ok().body(userService.updateUser(username, userRequestDto));
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @DeleteMapping("/{username}")
-    public ResponseEntity<String> deleteUser(@PathVariable String username) {
-        return ResponseEntity.ok(userService.deleteUser(username));
+    public ResponseEntity<String> deleteUser(@PathVariable String username, @AuthenticationPrincipal UserDetails userDetails) {
+        if (SecurityUtil.isSelfOrAdmin(userDetails, username)) {
+            return ResponseEntity.ok(userService.deleteUser(username));
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not allowed to delete this user");
+        }
+
+
     }
 
     @PutMapping("/{username}/authorities")

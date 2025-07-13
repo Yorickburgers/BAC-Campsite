@@ -3,13 +3,19 @@ package nl.novi.baccampsite.controllers;
 import nl.novi.baccampsite.dtos.UserRequestDto;
 import nl.novi.baccampsite.dtos.UserResponseDto;
 import nl.novi.baccampsite.services.UserService;
+import nl.novi.baccampsite.exceptions.BadRequestException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -21,18 +27,22 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> retrieveAllUsers() {
-        return ResponseEntity.ok(userService.retrieveAllUsers());
+        return ResponseEntity.ok().body(userService.retrieveAllUsers());
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<UserResponseDto>  retrieveUser(@PathVariable String username) {
-        return ResponseEntity.ok(userService.retrieveUser(username));
+    public ResponseEntity<UserResponseDto>  retrieveUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String username) {
+        if (userDetails.getUsername().equals(username)) {
+            UserResponseDto user = userService.retrieveUser(username);
+            return ResponseEntity.ok().body(user);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequestDto) {
         UserResponseDto userResponseDto = userService.createUser(userRequestDto);
-
+        userService.addAuthority(userResponseDto.username, "ROLE_USER");
         URI uri = URI.create(
                 ServletUriComponentsBuilder
                         .fromCurrentRequest()
@@ -49,5 +59,21 @@ public class UserController {
     @DeleteMapping("/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable String username) {
         return ResponseEntity.ok(userService.deleteUser(username));
+    }
+
+    @GetMapping("/{username}/authorities")
+    public ResponseEntity<String> addUserAuthority(@PathVariable String username, @RequestBody Map<String, Object> fields) {
+        try {
+            String authorityName = (String) fields.get("authority");
+            return ResponseEntity.ok(userService.addAuthority(username, authorityName));
+        }
+        catch (Exception e) {
+            throw new BadRequestException();
+        }
+    }
+
+    @DeleteMapping("/{username}/authorities/{authority}")
+    public ResponseEntity<String> deleteUserAuthority(@PathVariable String username, @PathVariable String authority) {
+        return ResponseEntity.ok(userService.removeAuthority(username, authority));
     }
 }

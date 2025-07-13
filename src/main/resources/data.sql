@@ -51,8 +51,8 @@ values  ('Path of the Totem', 'The Barbarian channels the bestial powers of a to
         ('School of Abjuration', 'The Wizard has studied Abjuration spells in particular, boosting their defensive spells and granting them the power to conjure powerful shields.', 'Abjuration Savant', 'Arcane Ward', 'Projected Ward', 'Spell Resistance', 12);
 
 insert into users (username, password, email)
-values ('admin', '', 'admin@admin.nl'),
-       ('testuser', '', 'user@test.nl');
+values ('admin', '$2a$04$4krYvHPkbhgygu8Ypmey/ud16dLRDLZp6GPGHdWBUlhbTuUukQnjC', 'admin@admin.nl'),
+       ('testuser', '$2a$04$cJxtmFJf.70edAdSiYeSjeFhAnsEWD/tXjbnEN4Y9GhpPkLTquD52', 'user@test.nl');
 
 insert into authorities (username, authority)
 values ('admin', 'ROLE_ADMIN'),

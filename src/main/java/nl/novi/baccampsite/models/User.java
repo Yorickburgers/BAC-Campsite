@@ -3,6 +3,8 @@ package nl.novi.baccampsite.models;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 
 @Entity
@@ -12,11 +14,20 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String password;
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @OneToMany(
+            targetEntity = Authority.class,
+            mappedBy = "username",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    private Set<Authority> authorities = new HashSet<>();
+
 
     @OneToMany(mappedBy = "user")
     private List<Character> characters =  new ArrayList<>();
@@ -70,5 +81,16 @@ public class User {
 
     public void setCampaigns(List<Campaign> campaigns) {
         this.campaigns = campaigns;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void addAuthority(Authority auth) {
+        this.authorities.add(auth);
+    }
+    public void removeAuthority(Authority auth) {
+        this.authorities.remove(auth);
     }
 }

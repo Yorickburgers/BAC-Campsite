@@ -3,6 +3,7 @@ package nl.novi.baccampsite.mappers;
 import nl.novi.baccampsite.dtos.UserRequestDto;
 import nl.novi.baccampsite.dtos.UserResponseDto;
 import nl.novi.baccampsite.models.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 
@@ -22,15 +23,15 @@ public class UserMapper {
         return dto;
     }
 
-    public static User toUser(UserRequestDto dto) {
+    public static User toUser(UserRequestDto dto, PasswordEncoder passwordEncoder) {
         User user = new User();
-        updateUserFromDto(dto, user);
+        updateUserFromDto(dto, user, passwordEncoder);
         return user;
     }
 
-    public static void updateUserFromDto(UserRequestDto dto, User user) {
+    public static void updateUserFromDto(UserRequestDto dto, User user, PasswordEncoder passwordEncoder) {
         user.setUsername(dto.username);
-        user.setPassword(dto.password);
+        user.setPassword(passwordEncoder.encode(dto.password));
         user.setEmail(dto.email);
     }
 }

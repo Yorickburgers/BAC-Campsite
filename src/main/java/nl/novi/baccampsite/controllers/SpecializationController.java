@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@RestController
+@RestController("/specializations")
 public class SpecializationController {
     private final SpecializationService specializationService;
 
@@ -19,22 +19,19 @@ public class SpecializationController {
         this.specializationService = specializationService;
     }
 
-    @GetMapping("/professions/{professionId}/specializations")
-    public ResponseEntity<List<SpecializationSummaryDto>> retrieveSpecializationsByProfession(@PathVariable Long professionId) {
-        return ResponseEntity.ok(specializationService.retrieveSpecializationsByProfession(professionId));
-    }
 
-    @GetMapping("/specializations")
+
+    @GetMapping
     public ResponseEntity<List<SpecializationResponseDto>> retrieveAllSpecializations() {
         return ResponseEntity.ok(specializationService.retrieveAllSpecializations());
     }
 
-    @GetMapping("/specializations/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<SpecializationResponseDto>  retrieveSpecialization(@PathVariable Long id) {
         return ResponseEntity.ok(specializationService.retrieveSpecialization(id));
     }
 
-    @PostMapping("/specializations")
+    @PostMapping
     public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@RequestBody SpecializationRequestDto specializationRequestDto) {
         SpecializationResponseDto specializationResponseDto = specializationService.createSpecialization(specializationRequestDto);
 
@@ -46,12 +43,12 @@ public class SpecializationController {
         return ResponseEntity.created(uri).body(specializationResponseDto);
     }
 
-    @PutMapping("/specializations/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<SpecializationResponseDto>  updateSpecialization(@PathVariable Long id, @RequestBody SpecializationRequestDto specializationRequestDto) {
         return ResponseEntity.ok().body(specializationService.updateSpecialization(id, specializationRequestDto));
     }
 
-    @DeleteMapping("/specializations/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSpecialization(@PathVariable Long id) {
         return ResponseEntity.ok(specializationService.deleteSpecialization(id));
     }

@@ -4,6 +4,7 @@ import nl.novi.baccampsite.dtos.CampaignRequestDto;
 import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.exceptions.BadRequestException;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.exceptions.UsernameNotFoundException;
 import nl.novi.baccampsite.mappers.CampaignMapper;
@@ -69,6 +70,17 @@ public class CampaignService {
                 .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
         CampaignMapper.updateCampaignFromDto(campaignRequestDto, currentCampaign);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(currentCampaign));
+    }
+
+    public CampaignResponseDto assignCharacterToCampaign(Long campaignId, Long characterId) {
+        Campaign campaign = campaignRepository.findById(campaignId)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + campaignId + " not found!"));
+        Character character = characterRepository.findById(characterId)
+                .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
+        if (campaign.getCharacters().contains(character)) {
+            throw new BadRequestException("Character is already part of this campaign!");
+        }
+        return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
 
     public CampaignResponseDto removeCharacterFromCampaign(Long campaignId, Long characterId) {

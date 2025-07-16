@@ -95,7 +95,7 @@ public class CampaignController {
                 .ok()
                 .header("Message",
                         "Character succesfully assigned to campaign " + campaign.name + "!")
-                .body(campaignService.assignCharacterToCompaign);
+                .body(campaignService.assignCharacterToCampaign(campaignId, characterId));
 
     }
 

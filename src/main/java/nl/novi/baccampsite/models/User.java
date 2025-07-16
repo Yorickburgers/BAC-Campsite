@@ -29,10 +29,10 @@ public class User {
     private Set<Authority> authorities = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Character> characters =  new ArrayList<>();
 
-    @OneToMany(mappedBy = "dungeonMaster")
+    @OneToMany(mappedBy = "dungeonMaster", fetch = FetchType.EAGER)
     private List<Campaign> campaigns = new ArrayList<>();
 
     public User() {}

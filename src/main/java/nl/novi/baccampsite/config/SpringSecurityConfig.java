@@ -43,22 +43,23 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                                .requestMatchers("/authenticate").permitAll()
+
                                 .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/users/**").authenticated()
                                 .requestMatchers("**/authorities/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/users/**").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/users/**").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/specializations/**").authenticated()
-                                .requestMatchers("/specializations/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/professions/**").authenticated()
-                                .requestMatchers("/professions/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/characters").hasRole("ADMIN")
-                                .requestMatchers("/characters/**").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/campaigns").hasRole("ADMIN")
+                                .requestMatchers("/professions/**").hasRole("ADMIN")
+                                .requestMatchers("/specializations/**").hasRole("ADMIN")
+
+                                .requestMatchers("/users/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/specializations/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/professions/**").authenticated()
+                                .requestMatchers("/characters/**").authenticated()
                                 .requestMatchers("/campaigns/**").authenticated()
                                 .requestMatchers("/authenticated").authenticated()
-                                .requestMatchers("/authenticate").permitAll()
-                                .anyRequest().denyAll() /* TODO MORE ENDPOINTS */
+
+                                .anyRequest().denyAll()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

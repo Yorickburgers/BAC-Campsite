@@ -4,6 +4,7 @@ import nl.novi.baccampsite.dtos.CampaignRequestDto;
 import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.exceptions.ForbiddenException;
 import nl.novi.baccampsite.services.CampaignService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +64,7 @@ public class CampaignController {
     public ResponseEntity<CampaignResponseDto>  updateCampaign(@PathVariable Long id, @RequestBody CampaignRequestDto campaignRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
         CampaignResponseDto campaign = campaignService.retrieveCampaign(id);
         if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
-            return  ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenException("You are only allowed to edit a campaign if you are its Dungeon Master.");
         }
         return ResponseEntity.ok().body(campaignService.updateCampaign(id, campaignRequestDto));
     }
@@ -72,7 +73,7 @@ public class CampaignController {
     public ResponseEntity<String> deleteCampaign(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         CampaignResponseDto campaign = campaignService.retrieveCampaign(id);
         if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
-            return  ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not allowed to delete this campaign");
+            throw new ForbiddenException("You are only allowed to delete your own campaigns.");
         }
         return ResponseEntity.ok(campaignService.deleteCampaign(id));
     }

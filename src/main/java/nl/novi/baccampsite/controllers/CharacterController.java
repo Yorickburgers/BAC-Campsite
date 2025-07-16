@@ -2,6 +2,7 @@ package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.exceptions.ForbiddenException;
 import nl.novi.baccampsite.services.CharacterService;
 import nl.novi.baccampsite.utils.SecurityUtil;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class CharacterController {
     public ResponseEntity<CharacterResponseDto>  retrieveCharacter(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         CharacterResponseDto dto =  characterService.retrieveCharacter(id);
         if (!SecurityUtil.canAccessCharacter(userDetails, dto)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenException("You are not the owner or dungeon master of this character");
         }
         return ResponseEntity.ok(dto);
     }
@@ -53,7 +54,7 @@ public class CharacterController {
     @PutMapping("/{id}")
     public ResponseEntity<CharacterResponseDto>  updateCharacter(@PathVariable Long id, @RequestBody CharacterRequestDto characterRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
         if (!SecurityUtil.canEditCharacter(userDetails, characterService.retrieveCharacter(id))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenException("You are not the owner or dungeon master of this character");
         }
         return ResponseEntity.ok(characterService.updateCharacter(id, characterRequestDto));
     }
@@ -61,7 +62,7 @@ public class CharacterController {
     @PutMapping("/{id}/unclaim")
     public ResponseEntity<String> unclaimCharacter(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         if (!SecurityUtil.isSelfOrAdmin(userDetails, characterService.retrieveCharacter(id).user.username)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenException("You cannot unclaim a character that is not your own.");
         }
         return ResponseEntity.ok(characterService.unclaimCharacter(id));
     }
@@ -74,16 +75,15 @@ public class CharacterController {
     @PutMapping("/{charId}/specialize/{specId}")
     public ResponseEntity<CharacterResponseDto> specializeCharacter(@PathVariable Long charId, @PathVariable Long specId, @AuthenticationPrincipal  UserDetails userDetails) {
         if (!SecurityUtil.canSpecCharacter(userDetails, characterService.retrieveCharacter(charId))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ForbiddenException("You are not the owner or dungeon master of this character");
         }
         return ResponseEntity.ok(characterService.specializeCharacter(charId, specId));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCharacter(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        CharacterResponseDto dto = characterService.retrieveCharacter(id);
-        if (!SecurityUtil.canDeleteCharacter(userDetails, dto)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if (!SecurityUtil.canDeleteCharacter(userDetails, characterService.retrieveCharacter(id))) {
+            throw new ForbiddenException("You cannot delete a character that is not your own, nor is an unclaimed character in your campaign.");
         }
         return ResponseEntity.ok(characterService.deleteCharacter(id));
     }

@@ -34,7 +34,7 @@ public class UserController {
     @GetMapping("/{username}")
     public ResponseEntity<UserResponseDto>  retrieveUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String username) {
         if (!userDetails.getUsername().equals(username)) {
-            throw new ForbiddenException("You are not allowed to delete this user");
+            throw new ForbiddenException("You are only allowed to see your own details.");
 
         }
         return ResponseEntity.ok().body(userService.retrieveUser(username));
@@ -64,7 +64,7 @@ public class UserController {
     @DeleteMapping("/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable String username, @AuthenticationPrincipal UserDetails userDetails) {
         if (!SecurityUtil.isSelfOrAdmin(userDetails, username)) {
-            throw new ForbiddenException("You are not allowed to delete this user.");
+            throw new ForbiddenException("You can only delete your own details.");
         }
         return ResponseEntity.ok(userService.deleteUser(username));
     }

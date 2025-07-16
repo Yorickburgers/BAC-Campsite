@@ -51,7 +51,7 @@ public class CharacterService {
         Character character = CharacterMapper.toCharacter(characterRequestDto, profession);
         User user = userRepository.findById(userDetails.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-        claimCharacter(character.getId(), userDetails);
+        character.setUser(user);
         return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
     }
 

@@ -2,6 +2,7 @@ package nl.novi.baccampsite.services;
 
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.dtos.CharacterSummaryDto;
 import nl.novi.baccampsite.exceptions.BadRequestException;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.exceptions.UsernameNotFoundException;
@@ -34,9 +35,9 @@ public class CharacterService {
         this.userRepository = userRepository;
     }
 
-    public List<CharacterResponseDto> retrieveAllCharacters() {
-        List<CharacterResponseDto> characters = new ArrayList<>();
-        characterRepository.findAll().forEach(character -> characters.add(CharacterMapper.toCharacterResponseDto(character)));
+    public List<CharacterSummaryDto> retrieveAllCharacters() {
+        List<CharacterSummaryDto> characters = new ArrayList<>();
+        characterRepository.findAll().forEach(character -> characters.add(CharacterMapper.toCharacterSummaryDto(character)));
         return characters;
     }
 

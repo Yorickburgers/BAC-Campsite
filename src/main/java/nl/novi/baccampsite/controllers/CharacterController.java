@@ -2,8 +2,10 @@ package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.dtos.CharacterSummaryDto;
 import nl.novi.baccampsite.exceptions.ForbiddenException;
 import nl.novi.baccampsite.services.CharacterService;
+import nl.novi.baccampsite.services.UserService;
 import nl.novi.baccampsite.utils.SecurityUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,14 +21,20 @@ import java.util.List;
 public class CharacterController {
 
     private final CharacterService characterService;
+    private final UserService userService;
 
-    public CharacterController(CharacterService characterService) {
+    public CharacterController(CharacterService characterService, UserService userService) {
         this.characterService = characterService;
+        this.userService = userService;
     }
 
     @GetMapping
-    public ResponseEntity<List<CharacterResponseDto>> retrieveAllCharacters() {
-        return ResponseEntity.ok(characterService.retrieveAllCharacters());
+    public ResponseEntity<List<CharacterSummaryDto>> retrieveAllCharacters(@AuthenticationPrincipal UserDetails userDetails) {
+        if (SecurityUtil.hasRole(userDetails, "ADMIN")) {
+            return ResponseEntity.ok(characterService.retrieveAllCharacters());
+        }
+        return ResponseEntity.ok(userService.retrieveUser(userDetails.getUsername()).characters);
+
     }
 
     @GetMapping("/{id}")

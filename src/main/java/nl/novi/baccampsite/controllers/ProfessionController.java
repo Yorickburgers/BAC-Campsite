@@ -47,12 +47,20 @@ public class ProfessionController {
                         .fromCurrentRequest()
                         .path("/" + professionResponseDto.id).toUriString());
 
-        return ResponseEntity.created(uri).body(professionResponseDto);
+        return ResponseEntity
+                .created(uri)
+                .header("Message",
+                        "Profession " + professionResponseDto.name + " created!")
+                .body(professionResponseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProfessionResponseDto>  updateProfession(@PathVariable Long id, @RequestBody ProfessionRequestDto professionRequestDto) {
-        return ResponseEntity.ok().body(professionService.updateProfession(id, professionRequestDto));
+        return ResponseEntity
+                .ok()
+                .header("Message",
+                        "Profession " + professionRequestDto.name + " updated!")
+                .body(professionService.updateProfession(id, professionRequestDto));
     }
 
     @DeleteMapping("/{id}")

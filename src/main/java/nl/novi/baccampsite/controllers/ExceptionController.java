@@ -1,6 +1,7 @@
 package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.exceptions.BadRequestException;
+import nl.novi.baccampsite.exceptions.ForbiddenException;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.exceptions.UsernameNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -23,5 +24,10 @@ public class ExceptionController {
     @ExceptionHandler(value = UsernameNotFoundException.class)
     public ResponseEntity<Object> exception(UsernameNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = ForbiddenException.class)
+    public ResponseEntity<Object> exception(ForbiddenException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
     }
 }

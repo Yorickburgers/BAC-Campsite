@@ -24,15 +24,15 @@ public class Character {
     @JoinColumn(name = "user_id", referencedColumnName = "username")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profession_id", referencedColumnName = "id", nullable = false)
     private Profession profession;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "specialization_id", referencedColumnName = "id")
     private Specialization specialization;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "campaign_id", referencedColumnName = "id")
     private Campaign campaign;
 

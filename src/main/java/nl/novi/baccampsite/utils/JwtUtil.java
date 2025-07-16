@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtil {
-    private final static String SECRET_KEY = "Only Fairview's Finest can stop the Cult of Talona from spreading pestilence throughout the Forgotten Realms!";
+    private final static String SECRET_KEY = "SamenStaanWeSterkerTegenHetKwaadInDeWijdeWereld";
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);

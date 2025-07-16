@@ -14,10 +14,10 @@ public class Campaign {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "campaign")
+    @OneToMany(mappedBy = "campaign", fetch = FetchType.EAGER)
     private List<Character> characters = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "dungeon_master", referencedColumnName = "username")
     private User dungeonMaster;
 

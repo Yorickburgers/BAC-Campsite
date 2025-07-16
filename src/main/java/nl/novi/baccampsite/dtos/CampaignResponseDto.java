@@ -8,4 +8,5 @@ public class CampaignResponseDto {
     public String name;
     public String description;
     public List<CharacterSummaryDto> characters =  new ArrayList<>();
+    public String dungeonMaster;
 }

@@ -32,7 +32,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Character> characters =  new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "dungeonMaster")
     private List<Campaign> campaigns = new ArrayList<>();
 
     public User() {}

@@ -15,6 +15,7 @@ public class CampaignMapper {
         dto.characters = new ArrayList<>();
                 campaign.getCharacters().forEach((character) ->
                         dto.characters.add(CharacterMapper.toCharacterSummaryDto(character)));
+        dto.dungeonMaster = campaign.getDungeonMaster().getUsername();
         return dto;
     }
 

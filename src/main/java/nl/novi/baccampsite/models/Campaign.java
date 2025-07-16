@@ -18,8 +18,8 @@ public class Campaign {
     private List<Character> characters = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "username")
-    private User user;
+    @JoinColumn(name = "dungeon_master", referencedColumnName = "username")
+    private User dungeonMaster;
 
     public Campaign() {}
 
@@ -54,5 +54,13 @@ public class Campaign {
 
     public void setCharacters(List<Character> characters) {
         this.characters = characters;
+    }
+
+    public User getDungeonMaster() {
+        return dungeonMaster;
+    }
+
+    public void setDungeonMaster(User dungeonMaster) {
+        this.dungeonMaster = dungeonMaster;
     }
 }

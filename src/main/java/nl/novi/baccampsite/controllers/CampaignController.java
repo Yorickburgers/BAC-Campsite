@@ -6,6 +6,8 @@ import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import nl.novi.baccampsite.services.CampaignService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -33,8 +35,8 @@ public class CampaignController {
     }
 
     @PostMapping
-    public ResponseEntity<CampaignResponseDto> createCampaign(@RequestBody CampaignRequestDto campaignRequestDto) {
-        CampaignResponseDto campaignResponseDto = campaignService.createCampaign(campaignRequestDto);
+    public ResponseEntity<CampaignResponseDto> createCampaign(@RequestBody CampaignRequestDto campaignRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+        CampaignResponseDto campaignResponseDto = campaignService.createCampaign(campaignRequestDto, userDetails);
 
         URI uri = URI.create(
                 ServletUriComponentsBuilder

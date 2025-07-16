@@ -5,14 +5,18 @@ import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
+import nl.novi.baccampsite.exceptions.UsernameNotFoundException;
 import nl.novi.baccampsite.mappers.CampaignMapper;
 import nl.novi.baccampsite.mappers.CharacterMapper;
 import nl.novi.baccampsite.models.Campaign;
 import nl.novi.baccampsite.models.Character;
 import nl.novi.baccampsite.models.Profession;
+import nl.novi.baccampsite.models.User;
 import nl.novi.baccampsite.repositories.CampaignRepository;
 import nl.novi.baccampsite.repositories.CharacterRepository;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
+import nl.novi.baccampsite.repositories.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,11 +27,13 @@ public class CampaignService {
     private final CampaignRepository campaignRepository;
     private final CharacterRepository characterRepository;
     private final ProfessionRepository professionRepository;
+    private final UserRepository userRepository;
 
-    public CampaignService(CampaignRepository campaignRepository, CharacterRepository characterRepository, ProfessionRepository professionRepository) {
+    public CampaignService(CampaignRepository campaignRepository, CharacterRepository characterRepository, ProfessionRepository professionRepository, UserRepository userRepository) {
         this.campaignRepository = campaignRepository;
         this.characterRepository = characterRepository;
         this.professionRepository = professionRepository;
+        this.userRepository = userRepository;
     }
 
     public List<CampaignResponseDto> retrieveAllCampaigns() {
@@ -40,8 +46,10 @@ public class CampaignService {
         return CampaignMapper.toCampaignResponseDto(campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!")));
     }
 
-    public CampaignResponseDto createCampaign(CampaignRequestDto campaignRequestDto) {
+    public CampaignResponseDto createCampaign(CampaignRequestDto campaignRequestDto, UserDetails userDetails) {
         Campaign campaign = CampaignMapper.toCampaign(campaignRequestDto);
+        campaign.setDungeonMaster(userRepository.findById(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User " + userDetails.getUsername() + " not found!")));
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
 

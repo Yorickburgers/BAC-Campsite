@@ -48,7 +48,11 @@ public class CharacterController {
                         .fromCurrentRequest()
                         .path("/" + characterResponseDto.id).toUriString());
 
-        return ResponseEntity.created(uri).body(characterResponseDto);
+        return ResponseEntity
+                .created(uri)
+                .header("Message",
+                        "Character " + characterRequestDto.name + " has been created!")
+                .body(characterResponseDto);
     }
 
     @PutMapping("/{id}")
@@ -56,35 +60,54 @@ public class CharacterController {
         if (!SecurityUtil.canEditCharacter(userDetails, characterService.retrieveCharacter(id))) {
             throw new ForbiddenException("You are not the owner or dungeon master of this character");
         }
-        return ResponseEntity.ok(characterService.updateCharacter(id, characterRequestDto));
+        return ResponseEntity
+                .ok()
+                .header("Message",
+                        "Character " + characterRequestDto.name + " has been updated!")
+                .body(characterService.updateCharacter(id, characterRequestDto));
     }
 
     @PutMapping("/{id}/unclaim")
     public ResponseEntity<String> unclaimCharacter(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        if (!SecurityUtil.isSelfOrAdmin(userDetails, characterService.retrieveCharacter(id).user.username)) {
+        CharacterResponseDto character = characterService.retrieveCharacter(id);
+        if (!SecurityUtil.isSelfOrAdmin(userDetails, character.user.username)) {
             throw new ForbiddenException("You cannot unclaim a character that is not your own.");
         }
-        return ResponseEntity.ok(characterService.unclaimCharacter(id));
+        return ResponseEntity
+                .ok()
+                .body(characterService.unclaimCharacter(id));
     }
 
     @PutMapping("/{id}/claim")
     public ResponseEntity<CharacterResponseDto> claimCharacter(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(characterService.claimCharacter(id, userDetails));
+        return ResponseEntity
+                .ok()
+                .header("Message",
+                        "Character " + characterService.retrieveCharacter(id).name +  " has been claimed by you!")
+                .body(characterService.claimCharacter(id, userDetails));
     }
 
     @PutMapping("/{charId}/specialize/{specId}")
     public ResponseEntity<CharacterResponseDto> specializeCharacter(@PathVariable Long charId, @PathVariable Long specId, @AuthenticationPrincipal  UserDetails userDetails) {
-        if (!SecurityUtil.canSpecCharacter(userDetails, characterService.retrieveCharacter(charId))) {
+        CharacterResponseDto character = characterService.retrieveCharacter(charId);
+        if (!SecurityUtil.canSpecCharacter(userDetails, character)) {
             throw new ForbiddenException("You are not the owner or dungeon master of this character");
         }
-        return ResponseEntity.ok(characterService.specializeCharacter(charId, specId));
+        return ResponseEntity
+                .ok()
+                .header("Message",
+                        "Character " + character.name + " has been specialized!")
+                .body(characterService.specializeCharacter(charId, specId));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCharacter(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        if (!SecurityUtil.canDeleteCharacter(userDetails, characterService.retrieveCharacter(id))) {
+        CharacterResponseDto character = characterService.retrieveCharacter(id);
+        if (!SecurityUtil.canDeleteCharacter(userDetails, character)) {
             throw new ForbiddenException("You cannot delete a character that is not your own, nor is an unclaimed character in your campaign.");
         }
-        return ResponseEntity.ok(characterService.deleteCharacter(id));
+        return ResponseEntity
+                .ok()
+                .body(characterService.deleteCharacter(id));
     }
 }

@@ -69,7 +69,7 @@ public class CharacterService {
                 .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
         character.setUser(null);
         characterRepository.save(character);
-        return "Character " + id + " has been unclaimed!";
+        return "Character " + character.getName() + " has been unclaimed!";
     }
 
     public CharacterResponseDto claimCharacter(Long id, UserDetails userDetails) {
@@ -116,6 +116,6 @@ public CharacterResponseDto specializeCharacter(Long charId, Long specId) {
         Character character = characterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
         characterRepository.delete(character);
-        return "Character " + character.getName() + " with id " + id + " has been deleted!";
+        return "Character " + character.getName() + " with has been deleted!";
     }
 }

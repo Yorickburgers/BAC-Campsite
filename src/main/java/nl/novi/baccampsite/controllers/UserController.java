@@ -2,10 +2,10 @@ package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.dtos.UserRequestDto;
 import nl.novi.baccampsite.dtos.UserResponseDto;
+import nl.novi.baccampsite.exceptions.ForbiddenException;
 import nl.novi.baccampsite.services.UserService;
 import nl.novi.baccampsite.exceptions.BadRequestException;
 import nl.novi.baccampsite.utils.SecurityUtil;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,11 +33,11 @@ public class UserController {
 
     @GetMapping("/{username}")
     public ResponseEntity<UserResponseDto>  retrieveUser(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String username) {
-        if (userDetails.getUsername().equals(username)) {
-            UserResponseDto user = userService.retrieveUser(username);
-            return ResponseEntity.ok().body(user);
+        if (!userDetails.getUsername().equals(username)) {
+            throw new ForbiddenException("You are not allowed to delete this user");
+
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.ok().body(userService.retrieveUser(username));
     }
 
     @PostMapping
@@ -54,21 +54,19 @@ public class UserController {
 
     @PutMapping("/{username}")
     public ResponseEntity<UserResponseDto>  updateUser(@PathVariable String username, @RequestBody UserRequestDto userRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails.getUsername().equals(username)) {
-            return ResponseEntity.ok().body(userService.updateUser(username, userRequestDto));
+        if (!userDetails.getUsername().equals(username)) {
+            throw new ForbiddenException("You can only update your own details.");
+
         }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.ok().body(userService.updateUser(username, userRequestDto));
     }
 
     @DeleteMapping("/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable String username, @AuthenticationPrincipal UserDetails userDetails) {
-        if (SecurityUtil.isSelfOrAdmin(userDetails, username)) {
-            return ResponseEntity.ok(userService.deleteUser(username));
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not allowed to delete this user");
+        if (!SecurityUtil.isSelfOrAdmin(userDetails, username)) {
+            throw new ForbiddenException("You are not allowed to delete this user.");
         }
-
-
+        return ResponseEntity.ok(userService.deleteUser(username));
     }
 
     @PutMapping("/{username}/authorities")

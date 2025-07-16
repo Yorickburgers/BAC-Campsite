@@ -69,6 +69,15 @@ public class CampaignController {
         return ResponseEntity.ok().body(campaignService.updateCampaign(id, campaignRequestDto));
     }
 
+    @PutMapping("/{campaignId}/characters/{characterId}")
+    public ResponseEntity<String> removeCharacterFromCampaign(@PathVariable Long campaignId, @PathVariable Long characterId, @AuthenticationPrincipal UserDetails userDetails) {
+        CampaignResponseDto campaign = campaignService.retrieveCampaign(campaignId);
+        if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
+            throw new ForbiddenException("Only the Dungeon Master can remove characters from their campaign.");
+        }
+        return ResponseEntity.ok().body(campaignService.removeCharacterFromCampaign(characterId, campaignId));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCampaign(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         CampaignResponseDto campaign = campaignService.retrieveCampaign(id);

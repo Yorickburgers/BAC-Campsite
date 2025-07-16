@@ -71,15 +71,15 @@ public class CampaignService {
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(currentCampaign));
     }
 
-    public String removeCharacterFromCampaign(Long campaignId, Long characterId) {
+    public CampaignResponseDto removeCharacterFromCampaign(Long campaignId, Long characterId) {
         Campaign campaign = campaignRepository.findById(campaignId)
                 .orElseThrow(() -> new RecordNotFoundException("Campaign " + campaignId + " not found!"));
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
-        boolean removed = campaign.getCharacters().remove(character);
-        if (!removed) return "Character is not part of this campaign.";
-        campaignRepository.save(campaign);
-        return "Character has been removed from campaign successfully.";
+        if (campaign.getCharacters() == null || !campaign.getCharacters().remove(character)) {
+            throw new RecordNotFoundException("Character is not part of this campaign!");
+        }
+        return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
 
     public String deleteCampaign(Long id) {

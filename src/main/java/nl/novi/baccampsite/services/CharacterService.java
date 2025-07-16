@@ -7,7 +7,6 @@ import nl.novi.baccampsite.mappers.CharacterMapper;
 import nl.novi.baccampsite.models.Character;
 import nl.novi.baccampsite.models.Profession;
 import nl.novi.baccampsite.models.Specialization;
-import nl.novi.baccampsite.models.User;
 import nl.novi.baccampsite.repositories.CharacterRepository;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
 import nl.novi.baccampsite.repositories.SpecializationRepository;

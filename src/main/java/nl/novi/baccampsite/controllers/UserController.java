@@ -28,7 +28,9 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> retrieveAllUsers() {
-        return ResponseEntity.ok().body(userService.retrieveAllUsers());
+        return ResponseEntity
+                .ok()
+                .body(userService.retrieveAllUsers());
     }
 
     @GetMapping("/{username}")
@@ -37,7 +39,9 @@ public class UserController {
             throw new ForbiddenException("You are only allowed to see your own details.");
 
         }
-        return ResponseEntity.ok().body(userService.retrieveUser(username));
+        return ResponseEntity
+                .ok()
+                .body(userService.retrieveUser(username));
     }
 
     @PostMapping
@@ -49,7 +53,11 @@ public class UserController {
                         .fromCurrentRequest()
                         .path("/" + userResponseDto.username).toUriString());
 
-        return ResponseEntity.created(uri).body(userResponseDto);
+        return ResponseEntity
+                .created(uri)
+                .header("Message",
+                        "User created!")
+                .body(userResponseDto);
     }
 
     @PutMapping("/{username}")
@@ -58,7 +66,11 @@ public class UserController {
             throw new ForbiddenException("You can only update your own details.");
 
         }
-        return ResponseEntity.ok().body(userService.updateUser(username, userRequestDto));
+        return ResponseEntity
+                .ok()
+                .header("Message",
+                        "User details updated!")
+                .body(userService.updateUser(username, userRequestDto));
     }
 
     @DeleteMapping("/{username}")
@@ -66,14 +78,16 @@ public class UserController {
         if (!SecurityUtil.isSelfOrAdmin(userDetails, username)) {
             throw new ForbiddenException("You can only delete your own details.");
         }
-        return ResponseEntity.ok(userService.deleteUser(username));
+        return ResponseEntity
+                .ok(userService.deleteUser(username));
     }
 
     @PutMapping("/{username}/authorities")
     public ResponseEntity<String> addUserAuthority(@PathVariable String username, @RequestBody Map<String, Object> fields) {
         try {
             String authorityName = (String) fields.get("authority");
-            return ResponseEntity.ok(userService.addAuthority(username, authorityName));
+            return ResponseEntity
+                    .ok(userService.addAuthority(username, authorityName));
         }
         catch (Exception e) {
             throw new BadRequestException();

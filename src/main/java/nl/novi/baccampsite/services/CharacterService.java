@@ -2,14 +2,19 @@ package nl.novi.baccampsite.services;
 
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.exceptions.BadRequestException;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
+import nl.novi.baccampsite.exceptions.UsernameNotFoundException;
 import nl.novi.baccampsite.mappers.CharacterMapper;
 import nl.novi.baccampsite.models.Character;
 import nl.novi.baccampsite.models.Profession;
 import nl.novi.baccampsite.models.Specialization;
+import nl.novi.baccampsite.models.User;
 import nl.novi.baccampsite.repositories.CharacterRepository;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
 import nl.novi.baccampsite.repositories.SpecializationRepository;
+import nl.novi.baccampsite.repositories.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,11 +25,13 @@ public class CharacterService {
     private final CharacterRepository characterRepository;
     private final ProfessionRepository professionRepository;
     private final SpecializationRepository specializationRepository;
+    private final UserRepository userRepository;
 
-    public CharacterService(CharacterRepository characterRepository, ProfessionRepository professionRepository, SpecializationRepository specializationRepository) {
+    public CharacterService(CharacterRepository characterRepository, ProfessionRepository professionRepository, SpecializationRepository specializationRepository,  UserRepository userRepository) {
         this.characterRepository = characterRepository;
         this.professionRepository = professionRepository;
         this.specializationRepository = specializationRepository;
+        this.userRepository = userRepository;
     }
 
     public List<CharacterResponseDto> retrieveAllCharacters() {
@@ -38,10 +45,13 @@ public class CharacterService {
                 .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!")));
     }
 
-    public CharacterResponseDto createCharacter(CharacterRequestDto characterRequestDto) {
+    public CharacterResponseDto createCharacter(CharacterRequestDto characterRequestDto, UserDetails userDetails) {
         Profession profession = professionRepository.findById(characterRequestDto.professionId)
                 .orElseThrow(() -> new RecordNotFoundException("Profession not found!"));
         Character character = CharacterMapper.toCharacter(characterRequestDto, profession);
+        User user = userRepository.findById(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        claimCharacter(character.getId(), userDetails);
         return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
     }
 
@@ -62,18 +72,30 @@ public class CharacterService {
         return "Character " + id + " has been unclaimed!";
     }
 
-//    public CharacterResponseDto claimCharacter(Long id) {
-//        Character character = characterRepository.findById(id)
-//                .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
-//        if (character.getUser() != null) {
-//            throw new IllegalStateException("Character is already claimed");
-//        }
-//
-////        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-////        User user = userRepository.findByUsername(auth.getName());
-//        character.setUser(user); // from loggedIn user, TODO
-//        return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
-//    }
+    public CharacterResponseDto claimCharacter(Long id, UserDetails userDetails) {
+        Character character = characterRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
+        if (character.getUser() != null) {
+            throw new BadRequestException("Character is already claimed by " + character.getUser().getUsername() + "!");
+        }
+
+        User user = userRepository.findById(userDetails.getUsername())
+                .orElseThrow(() -> new RecordNotFoundException("User " + userDetails.getUsername() + " not found!"));
+        if (character.getCampaign() != null) {
+            if (user.getUsername().equals(character.getCampaign().getDungeonMaster().getUsername())) {
+                throw new BadRequestException("Dungeon Masters cannot claim characters in their own campaign.");
+            }
+
+            if (user.getCharacters().stream()
+                    .anyMatch(ch -> ch.getCampaign() != null &&
+                            ch.getCampaign().getId().equals(character.getCampaign().getId()))) {
+                throw new BadRequestException("User already has a character in this campaign.");
+            }
+        }
+
+        character.setUser(user);
+        return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
+    }
 
 public CharacterResponseDto specializeCharacter(Long charId, Long specId) {
     Character character = characterRepository.findById(charId)
@@ -81,10 +103,10 @@ public CharacterResponseDto specializeCharacter(Long charId, Long specId) {
     Specialization spec = specializationRepository.findById(specId)
             .orElseThrow(() -> new RecordNotFoundException("Specialization " + specId + " not found!"));
     if (character.getLevel() < 3) {
-        throw new IllegalArgumentException("Character must be level 3 or higher to choose a specialization.");
+        throw new BadRequestException("Character must be level 3 or higher to choose a specialization.");
     }
     if (!spec.getProfession().equals(character.getProfession())) {
-        throw new IllegalArgumentException("This specialization does not belong to the character's profession.");
+        throw new BadRequestException("This specialization does not belong to the character's profession.");
     }
     character.setSpecialization(spec);
     return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));

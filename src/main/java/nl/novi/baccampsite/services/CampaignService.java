@@ -11,7 +11,6 @@ import nl.novi.baccampsite.mappers.CharacterMapper;
 import nl.novi.baccampsite.models.Campaign;
 import nl.novi.baccampsite.models.Character;
 import nl.novi.baccampsite.models.Profession;
-import nl.novi.baccampsite.models.User;
 import nl.novi.baccampsite.repositories.CampaignRepository;
 import nl.novi.baccampsite.repositories.CharacterRepository;
 import nl.novi.baccampsite.repositories.ProfessionRepository;

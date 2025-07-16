@@ -77,7 +77,7 @@ public class CharacterController {
     @PutMapping("/{id}/unclaim")
     public ResponseEntity<String> unclaimCharacter(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         CharacterResponseDto character = characterService.retrieveCharacter(id);
-        if (!SecurityUtil.isSelfOrAdmin(userDetails, character.user.username)) {
+        if (!SecurityUtil.isSelfOrAdmin(userDetails, character.user)) {
             throw new ForbiddenException("You cannot unclaim a character that is not your own.");
         }
         return ResponseEntity

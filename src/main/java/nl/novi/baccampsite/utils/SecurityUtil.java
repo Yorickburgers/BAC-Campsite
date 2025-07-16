@@ -14,7 +14,7 @@ public class SecurityUtil {
     }
 
     public static boolean isOwner(UserDetails userDetails, CharacterResponseDto dto) {
-        return dto.user != null && dto.user.username.equals(userDetails.getUsername());
+        return dto.user != null && dto.user.equals(userDetails.getUsername());
     }
 
     public static boolean isDungeonMaster(UserDetails userDetails, CharacterResponseDto dto) {
@@ -25,7 +25,7 @@ public class SecurityUtil {
 
     public static boolean canAccessCharacter(UserDetails userDetails, CharacterResponseDto dto) {
         return dto.user == null
-                || isSelfOrAdmin(userDetails, dto.user.username)
+                || isSelfOrAdmin(userDetails, dto.user)
                 || isDungeonMaster(userDetails, dto);
     }
 

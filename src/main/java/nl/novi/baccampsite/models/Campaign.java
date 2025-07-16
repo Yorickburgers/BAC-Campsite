@@ -12,6 +12,8 @@ public class Campaign {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @Column(length = 2000)
     private String description;
 
     @OneToMany(mappedBy = "campaign", fetch = FetchType.EAGER)

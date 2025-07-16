@@ -5,6 +5,7 @@ import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import nl.novi.baccampsite.exceptions.ForbiddenException;
+import nl.novi.baccampsite.models.Campaign;
 import nl.novi.baccampsite.services.CampaignService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,11 +45,19 @@ public class CampaignController {
                         .fromCurrentRequest()
                         .path("/" + campaignResponseDto.id).toUriString());
 
-        return ResponseEntity.created(uri).header("Message", "Campaign " + campaignRequestDto.name + " has been created!").body(campaignResponseDto);
+        return ResponseEntity
+                .created(uri)
+                .header("Message",
+                        "Campaign " + campaignRequestDto.name + " has been created!")
+                .body(campaignResponseDto);
     }
 
     @PostMapping("/{id}/characters")
-    public ResponseEntity<CharacterResponseDto> createCharacterForCampaign(@PathVariable Long id, @RequestBody CharacterRequestDto characterRequestDto) {
+    public ResponseEntity<CharacterResponseDto> createCharacterForCampaign(@PathVariable Long id, @RequestBody CharacterRequestDto characterRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+        CampaignResponseDto campaign = campaignService.retrieveCampaign(id);
+        if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
+            throw new ForbiddenException("Only the Dungeon Master may create an unclaimed character for their campaign.");
+        }
         CharacterResponseDto character = campaignService.createCharacterForCampaign(id, characterRequestDto);
 
         URI uri = URI.create(
@@ -56,7 +65,11 @@ public class CampaignController {
                         .fromCurrentRequest()
                         .path("/" + character.id).toUriString());
 
-        return ResponseEntity.created(uri).header("Message", "Character " + character.name + " has been created!").body(character);
+        return ResponseEntity
+                .created(uri)
+                .header("Message",
+                        "Character " + character.name + " has been created!")
+                .body(character);
     }
 
     @PutMapping("/{id}")
@@ -65,7 +78,25 @@ public class CampaignController {
         if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
             throw new ForbiddenException("You are only allowed to edit a campaign if you are its Dungeon Master.");
         }
-        return ResponseEntity.ok().header("Message", "Campaign has been updated.").body(campaignService.updateCampaign(id, campaignRequestDto));
+        return ResponseEntity
+                .ok()
+                .header("Message",
+                        "Campaign has been updated.")
+                .body(campaignService.updateCampaign(id, campaignRequestDto));
+    }
+
+    @PostMapping("/{campaignId}/characters/{characterId}")
+    public ResponseEntity<CampaignResponseDto> assignCharacterToCampaign(@PathVariable Long campaignId, @PathVariable Long characterId, @AuthenticationPrincipal UserDetails userDetails) {
+        CampaignResponseDto campaign = campaignService.retrieveCampaign(campaignId);
+        if (campaign.dungeonMaster.equals(userDetails.getUsername())) {
+            throw new ForbiddenException("You cannot assign a character to your own campaign.");
+        }
+        return ResponseEntity
+                .ok()
+                .header("Message",
+                        "Character succesfully assigned to campaign " + campaign.name + "!")
+                .body(campaignService.assignCharacterToCompaign);
+
     }
 
     @PutMapping("/{campaignId}/characters/{characterId}")
@@ -74,7 +105,11 @@ public class CampaignController {
         if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
             throw new ForbiddenException("Only the Dungeon Master can remove characters from their campaign.");
         }
-        return ResponseEntity.ok().header("Message", "Character has been removed from campaign!").body(campaignService.removeCharacterFromCampaign(characterId, campaignId));
+        return ResponseEntity
+                .ok()
+                .header("Message",
+                        "Character has been removed from campaign!")
+                .body(campaignService.removeCharacterFromCampaign(characterId, campaignId));
     }
 
     @DeleteMapping("/{id}")
@@ -83,6 +118,7 @@ public class CampaignController {
         if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
             throw new ForbiddenException("You are only allowed to delete your own campaigns.");
         }
-        return ResponseEntity.ok(campaignService.deleteCampaign(id));
+        return ResponseEntity
+                .ok(campaignService.deleteCampaign(id));
     }
 }

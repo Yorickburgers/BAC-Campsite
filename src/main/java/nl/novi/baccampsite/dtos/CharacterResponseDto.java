@@ -13,7 +13,7 @@ public class CharacterResponseDto {
     public int intelligence;
     public int wisdom;
     public int charisma;
-    public UserResponseDto user;
+    public String user;
     public ProfessionSummaryDto profession;
     public SpecializationSummaryDto specialization;
     public CampaignResponseDto campaign;

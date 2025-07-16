@@ -23,7 +23,9 @@ public class CharacterMapper {
         dto.charisma = character.getCharisma();
         dto.profession = ProfessionMapper.toProfessionSummaryDto(character.getProfession());
         if (character.getUser() != null) {
-            dto.user = UserMapper.toUserResponseDto(character.getUser());
+            dto.user = character.getUser().getUsername();
+        } else {
+            dto.user = null;
         }
         if (character.getSpecialization() != null) {
             dto.specialization = SpecializationMapper.toSpecializationSummaryDto(character.getSpecialization());

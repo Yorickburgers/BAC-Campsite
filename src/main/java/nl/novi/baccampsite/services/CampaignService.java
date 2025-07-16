@@ -42,7 +42,8 @@ public class CampaignService {
     }
 
     public CampaignResponseDto retrieveCampaign(Long id) {
-        return CampaignMapper.toCampaignResponseDto(campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!")));
+        return CampaignMapper.toCampaignResponseDto(campaignRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!")));
     }
 
     public CampaignResponseDto createCampaign(CampaignRequestDto campaignRequestDto, UserDetails userDetails) {
@@ -64,13 +65,26 @@ public class CampaignService {
     }
 
     public CampaignResponseDto updateCampaign(Long id, CampaignRequestDto campaignRequestDto) {
-        Campaign currentCampaign = campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
+        Campaign currentCampaign = campaignRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
         CampaignMapper.updateCampaignFromDto(campaignRequestDto, currentCampaign);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(currentCampaign));
     }
 
+    public String removeCharacterFromCampaign(Long campaignId, Long characterId) {
+        Campaign campaign = campaignRepository.findById(campaignId)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + campaignId + " not found!"));
+        Character character = characterRepository.findById(characterId)
+                .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
+        boolean removed = campaign.getCharacters().remove(character);
+        if (!removed) return "Character is not part of this campaign.";
+        campaignRepository.save(campaign);
+        return "Character has been removed from campaign successfully.";
+    }
+
     public String deleteCampaign(Long id) {
-        Campaign campaign = campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
+        Campaign campaign = campaignRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
         campaignRepository.delete(campaign);
         return "Campaign " + campaign.getName() + "with id " + id + " has been deleted!";
     }

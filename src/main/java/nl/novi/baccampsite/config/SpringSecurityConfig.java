@@ -21,10 +21,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SpringSecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    public SpringSecurityConfig(CustomUserDetailsService customUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+    public SpringSecurityConfig(CustomUserDetailsService customUserDetailsService, JwtRequestFilter jwtRequestFilter, CustomAccessDeniedHandler customAccessDeniedHandler) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
     @Bean
@@ -60,6 +62,8 @@ public class SpringSecurityConfig {
                                 .requestMatchers("/authenticated").authenticated()
 
                                 .anyRequest().denyAll()
+                )
+                .exceptionHandling(ex -> ex.accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

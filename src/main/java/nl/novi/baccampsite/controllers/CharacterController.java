@@ -30,7 +30,7 @@ public class CharacterController {
 
     @GetMapping
     public ResponseEntity<List<CharacterSummaryDto>> retrieveAllCharacters(@AuthenticationPrincipal UserDetails userDetails) {
-        if (SecurityUtil.hasRole(userDetails, "ADMIN")) {
+        if (SecurityUtil.hasRole(userDetails, "ROLE_ADMIN")) {
             return ResponseEntity.ok(characterService.retrieveAllCharacters());
         }
         return ResponseEntity.ok(userService.retrieveUser(userDetails.getUsername()).characters);

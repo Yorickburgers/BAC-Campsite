@@ -49,7 +49,6 @@ public class SpringSecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                                 .requestMatchers("/users/*/authorities/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/characters").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/campaigns").hasRole("ADMIN")
                                 .requestMatchers("/professions/**").hasRole("ADMIN")
                                 .requestMatchers("/specializations/**").hasRole("ADMIN")

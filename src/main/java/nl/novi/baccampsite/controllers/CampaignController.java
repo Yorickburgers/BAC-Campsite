@@ -5,8 +5,14 @@ import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import nl.novi.baccampsite.exceptions.ForbiddenException;
+import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.models.Campaign;
+import nl.novi.baccampsite.models.User;
+import nl.novi.baccampsite.repositories.UserRepository;
 import nl.novi.baccampsite.services.CampaignService;
+import nl.novi.baccampsite.services.CharacterService;
+import nl.novi.baccampsite.services.UserService;
+import nl.novi.baccampsite.utils.SecurityUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,14 +27,19 @@ import java.util.List;
 public class CampaignController {
 
     private final CampaignService campaignService;
+    private final CharacterService characterService;
 
-    public CampaignController(CampaignService campaignService) {
+    public CampaignController(CampaignService campaignService, UserRepository userRepository, CharacterService characterService) {
         this.campaignService = campaignService;
+        this.characterService = characterService;
     }
 
     @GetMapping
-    public ResponseEntity<List<CampaignResponseDto>> retrieveAllCampaigns() {
-        return ResponseEntity.ok(campaignService.retrieveAllCampaigns());
+    public ResponseEntity<List<CampaignResponseDto>> retrieveAllCampaigns(@AuthenticationPrincipal UserDetails userDetails) {
+        if (SecurityUtil.hasRole(userDetails, "ROLE_ADMIN")) {
+            return ResponseEntity.ok(campaignService.retrieveAllCampaigns());
+        }
+        return ResponseEntity.ok(campaignService.retrieveAllCampaignsForUser(userDetails.getUsername()));
     }
 
     @GetMapping("/{id}")
@@ -85,11 +96,15 @@ public class CampaignController {
                 .body(campaignService.updateCampaign(id, campaignRequestDto));
     }
 
-    @PostMapping("/{campaignId}/characters/{characterId}")
+    @PutMapping("/{campaignId}/characters/{characterId}")
     public ResponseEntity<CampaignResponseDto> assignCharacterToCampaign(@PathVariable Long campaignId, @PathVariable Long characterId, @AuthenticationPrincipal UserDetails userDetails) {
         CampaignResponseDto campaign = campaignService.retrieveCampaign(campaignId);
+        CharacterResponseDto character = characterService.retrieveCharacter(characterId);
         if (campaign.dungeonMaster.equals(userDetails.getUsername())) {
             throw new ForbiddenException("You cannot assign a character to your own campaign.");
+        }
+        if (!character.user.equals(userDetails.getUsername())) {
+            throw new ForbiddenException("You cannot assign characters that do not belong to you!");
         }
         return ResponseEntity
                 .ok()
@@ -99,11 +114,12 @@ public class CampaignController {
 
     }
 
-    @PutMapping("/{campaignId}/characters/{characterId}")
+    @DeleteMapping("/{campaignId}/characters/{characterId}")
     public ResponseEntity<CampaignResponseDto> removeCharacterFromCampaign(@PathVariable Long campaignId, @PathVariable Long characterId, @AuthenticationPrincipal UserDetails userDetails) {
         CampaignResponseDto campaign = campaignService.retrieveCampaign(campaignId);
-        if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
-            throw new ForbiddenException("Only the Dungeon Master can remove characters from their campaign.");
+        CharacterResponseDto character = characterService.retrieveCharacter(characterId);
+        if (!campaign.dungeonMaster.equals(userDetails.getUsername()) && !character.user.equals(userDetails.getUsername())) {
+            throw new ForbiddenException("A character can only be removed from a campaign by the campaign's Dungeon Master or the character's owner.");
         }
         return ResponseEntity
                 .ok()

@@ -12,6 +12,7 @@ import nl.novi.baccampsite.mappers.CharacterMapper;
 import nl.novi.baccampsite.models.Campaign;
 import nl.novi.baccampsite.models.Character;
 import nl.novi.baccampsite.models.Profession;
+import nl.novi.baccampsite.models.User;
 import nl.novi.baccampsite.repositories.CampaignRepository;
 import nl.novi.baccampsite.repositories.CharacterRepository;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
@@ -39,6 +40,14 @@ public class CampaignService {
     public List<CampaignResponseDto> retrieveAllCampaigns() {
         List<CampaignResponseDto> campaigns = new ArrayList<>();
         campaignRepository.findAll().forEach(campaign -> campaigns.add(CampaignMapper.toCampaignResponseDto(campaign)));
+        return campaigns;
+    }
+
+    public List<CampaignResponseDto> retrieveAllCampaignsForUser(String username) {
+        List<CampaignResponseDto> campaigns = new ArrayList<>();
+        User user = userRepository.findById(username)
+                .orElseThrow(() -> new RecordNotFoundException("User not found!"));
+        user.getCharacters().forEach(character -> campaigns.add(CampaignMapper.toCampaignResponseDto(character.getCampaign())));
         return campaigns;
     }
 
@@ -80,6 +89,7 @@ public class CampaignService {
         if (campaign.getCharacters().contains(character)) {
             throw new BadRequestException("Character is already part of this campaign!");
         }
+        campaign.getCharacters().add(character);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
 
@@ -91,6 +101,7 @@ public class CampaignService {
         if (campaign.getCharacters() == null || !campaign.getCharacters().remove(character)) {
             throw new RecordNotFoundException("Character is not part of this campaign!");
         }
+        campaign.getCharacters().remove(character);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
 

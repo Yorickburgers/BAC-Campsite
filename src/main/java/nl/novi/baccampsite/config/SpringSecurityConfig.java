@@ -49,13 +49,12 @@ public class SpringSecurityConfig {
 
                                 .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                                 .requestMatchers("/users/*/authorities/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/campaigns").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/specializations/**").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/professions/**").authenticated()
                                 .requestMatchers("/professions/**").hasRole("ADMIN")
                                 .requestMatchers("/specializations/**").hasRole("ADMIN")
 
                                 .requestMatchers("/users/**").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/specializations/**").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/professions/**").authenticated()
                                 .requestMatchers("/characters/**").authenticated()
                                 .requestMatchers("/campaigns/**").authenticated()
                                 .requestMatchers("/authenticated").authenticated()

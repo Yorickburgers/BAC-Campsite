@@ -5,13 +5,8 @@ import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import nl.novi.baccampsite.exceptions.ForbiddenException;
-import nl.novi.baccampsite.exceptions.RecordNotFoundException;
-import nl.novi.baccampsite.models.Campaign;
-import nl.novi.baccampsite.models.User;
-import nl.novi.baccampsite.repositories.UserRepository;
 import nl.novi.baccampsite.services.CampaignService;
 import nl.novi.baccampsite.services.CharacterService;
-import nl.novi.baccampsite.services.UserService;
 import nl.novi.baccampsite.utils.SecurityUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,7 +24,7 @@ public class CampaignController {
     private final CampaignService campaignService;
     private final CharacterService characterService;
 
-    public CampaignController(CampaignService campaignService, UserRepository userRepository, CharacterService characterService) {
+    public CampaignController(CampaignService campaignService, CharacterService characterService) {
         this.campaignService = campaignService;
         this.characterService = characterService;
     }

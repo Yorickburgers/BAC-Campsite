@@ -120,7 +120,7 @@ public class CampaignController {
                 .ok()
                 .header("Message",
                         "Character has been removed from campaign!")
-                .body(campaignService.removeCharacterFromCampaign(characterId, campaignId));
+                .body(campaignService.removeCharacterFromCampaign(campaignId, characterId));
     }
 
     @DeleteMapping("/{id}")

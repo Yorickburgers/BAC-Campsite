@@ -86,9 +86,11 @@ public class CampaignService {
                 .orElseThrow(() -> new RecordNotFoundException("Campaign " + campaignId + " not found!"));
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
-        if (campaign.getCharacters().contains(character)) {
+        if (character.getCampaign() != null && character.getCampaign().getId().equals(campaignId)) {
             throw new BadRequestException("Character is already part of this campaign!");
         }
+        character.setCampaign(campaign);
+        characterRepository.save(character);
         campaign.getCharacters().add(character);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
@@ -98,9 +100,11 @@ public class CampaignService {
                 .orElseThrow(() -> new RecordNotFoundException("Campaign " + campaignId + " not found!"));
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
-        if (campaign.getCharacters() == null || !campaign.getCharacters().remove(character)) {
+        if (character.getCampaign() == null || !campaignId.equals(character.getCampaign().getId())) {
             throw new RecordNotFoundException("Character is not part of this campaign!");
         }
+        character.setCampaign(null);
+        characterRepository.save(character);
         campaign.getCharacters().remove(character);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }

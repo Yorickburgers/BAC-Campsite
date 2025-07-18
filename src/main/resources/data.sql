@@ -49,3 +49,11 @@ values  ('Path of the Totem', 'The Barbarian channels the bestial powers of a to
         ('School of Divination', 'The Wizard has studied Divination spells in particular, empowering the gift of Foresight to gain an advantage in future encounters', 'Divination Savant', 'Future Sight', 'Third Eye', 'Greater Portent', 12),
         ('School of Evocation', 'The Wizard has studied Evocation spells in particular, boosting their raw magical damage output and enabling them to avoid damaging their allies.', 'Evocation Savant', 'Sculpt Spells', 'Potent Cantrips', 'Overchannel', 12),
         ('School of Abjuration', 'The Wizard has studied Abjuration spells in particular, boosting their defensive spells and granting them the power to conjure powerful shields.', 'Abjuration Savant', 'Arcane Ward', 'Projected Ward', 'Spell Resistance', 12);
+
+insert into users (username, password, email)
+values ('admin', '$2a$04$4krYvHPkbhgygu8Ypmey/ud16dLRDLZp6GPGHdWBUlhbTuUukQnjC', 'admin@admin.nl'),
+       ('testuser', '$2a$04$cJxtmFJf.70edAdSiYeSjeFhAnsEWD/tXjbnEN4Y9GhpPkLTquD52', 'user@test.nl');
+
+insert into authorities (username, authority)
+values ('admin', 'ROLE_ADMIN'),
+       ('testuser', 'ROLE_USER');

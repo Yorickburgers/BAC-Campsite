@@ -4,15 +4,20 @@ import nl.novi.baccampsite.dtos.CampaignRequestDto;
 import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
+import nl.novi.baccampsite.exceptions.BadRequestException;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
+import nl.novi.baccampsite.exceptions.UsernameNotFoundException;
 import nl.novi.baccampsite.mappers.CampaignMapper;
 import nl.novi.baccampsite.mappers.CharacterMapper;
 import nl.novi.baccampsite.models.Campaign;
 import nl.novi.baccampsite.models.Character;
 import nl.novi.baccampsite.models.Profession;
+import nl.novi.baccampsite.models.User;
 import nl.novi.baccampsite.repositories.CampaignRepository;
 import nl.novi.baccampsite.repositories.CharacterRepository;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
+import nl.novi.baccampsite.repositories.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,11 +28,13 @@ public class CampaignService {
     private final CampaignRepository campaignRepository;
     private final CharacterRepository characterRepository;
     private final ProfessionRepository professionRepository;
+    private final UserRepository userRepository;
 
-    public CampaignService(CampaignRepository campaignRepository, CharacterRepository characterRepository, ProfessionRepository professionRepository) {
+    public CampaignService(CampaignRepository campaignRepository, CharacterRepository characterRepository, ProfessionRepository professionRepository, UserRepository userRepository) {
         this.campaignRepository = campaignRepository;
         this.characterRepository = characterRepository;
         this.professionRepository = professionRepository;
+        this.userRepository = userRepository;
     }
 
     public List<CampaignResponseDto> retrieveAllCampaigns() {
@@ -36,12 +43,23 @@ public class CampaignService {
         return campaigns;
     }
 
-    public CampaignResponseDto retrieveCampaign(Long id) {
-        return CampaignMapper.toCampaignResponseDto(campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!")));
+    public List<CampaignResponseDto> retrieveAllCampaignsForUser(String username) {
+        List<CampaignResponseDto> campaigns = new ArrayList<>();
+        User user = userRepository.findById(username)
+                .orElseThrow(() -> new RecordNotFoundException("User not found!"));
+        user.getCharacters().forEach(character -> campaigns.add(CampaignMapper.toCampaignResponseDto(character.getCampaign())));
+        return campaigns;
     }
 
-    public CampaignResponseDto createCampaign(CampaignRequestDto campaignRequestDto) {
+    public CampaignResponseDto retrieveCampaign(Long id) {
+        return CampaignMapper.toCampaignResponseDto(campaignRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!")));
+    }
+
+    public CampaignResponseDto createCampaign(CampaignRequestDto campaignRequestDto, UserDetails userDetails) {
         Campaign campaign = CampaignMapper.toCampaign(campaignRequestDto);
+        campaign.setDungeonMaster(userRepository.findById(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User " + userDetails.getUsername() + " not found!")));
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
 
@@ -57,13 +75,39 @@ public class CampaignService {
     }
 
     public CampaignResponseDto updateCampaign(Long id, CampaignRequestDto campaignRequestDto) {
-        Campaign currentCampaign = campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
+        Campaign currentCampaign = campaignRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
         CampaignMapper.updateCampaignFromDto(campaignRequestDto, currentCampaign);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(currentCampaign));
     }
 
+    public CampaignResponseDto assignCharacterToCampaign(Long campaignId, Long characterId) {
+        Campaign campaign = campaignRepository.findById(campaignId)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + campaignId + " not found!"));
+        Character character = characterRepository.findById(characterId)
+                .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
+        if (campaign.getCharacters().contains(character)) {
+            throw new BadRequestException("Character is already part of this campaign!");
+        }
+        campaign.getCharacters().add(character);
+        return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
+    }
+
+    public CampaignResponseDto removeCharacterFromCampaign(Long campaignId, Long characterId) {
+        Campaign campaign = campaignRepository.findById(campaignId)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + campaignId + " not found!"));
+        Character character = characterRepository.findById(characterId)
+                .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
+        if (campaign.getCharacters() == null || !campaign.getCharacters().remove(character)) {
+            throw new RecordNotFoundException("Character is not part of this campaign!");
+        }
+        campaign.getCharacters().remove(character);
+        return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
+    }
+
     public String deleteCampaign(Long id) {
-        Campaign campaign = campaignRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
+        Campaign campaign = campaignRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
         campaignRepository.delete(campaign);
         return "Campaign " + campaign.getName() + "with id " + id + " has been deleted!";
     }

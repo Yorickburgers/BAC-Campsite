@@ -15,7 +15,7 @@ public class Specialization {
     private String traitThree;
     private String traitFour;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profession_id", nullable = false)
     private Profession profession;
 

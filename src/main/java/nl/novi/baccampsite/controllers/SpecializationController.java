@@ -2,7 +2,6 @@ package nl.novi.baccampsite.controllers;
 
 import nl.novi.baccampsite.dtos.SpecializationRequestDto;
 import nl.novi.baccampsite.dtos.SpecializationResponseDto;
-import nl.novi.baccampsite.dtos.SpecializationSummaryDto;
 import nl.novi.baccampsite.services.SpecializationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@RestController
+@RestController("/specializations")
 public class SpecializationController {
     private final SpecializationService specializationService;
 
@@ -19,22 +18,19 @@ public class SpecializationController {
         this.specializationService = specializationService;
     }
 
-    @GetMapping("/professions/{professionId}/specializations")
-    public ResponseEntity<List<SpecializationSummaryDto>> retrieveSpecializationsByProfession(@PathVariable Long professionId) {
-        return ResponseEntity.ok(specializationService.retrieveSpecializationsByProfession(professionId));
-    }
-
-    @GetMapping("/specializations")
+    @GetMapping
     public ResponseEntity<List<SpecializationResponseDto>> retrieveAllSpecializations() {
-        return ResponseEntity.ok(specializationService.retrieveAllSpecializations());
+        return ResponseEntity
+                .ok(specializationService.retrieveAllSpecializations());
     }
 
-    @GetMapping("/specializations/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<SpecializationResponseDto>  retrieveSpecialization(@PathVariable Long id) {
-        return ResponseEntity.ok(specializationService.retrieveSpecialization(id));
+        return ResponseEntity
+                .ok(specializationService.retrieveSpecialization(id));
     }
 
-    @PostMapping("/specializations")
+    @PostMapping
     public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@RequestBody SpecializationRequestDto specializationRequestDto) {
         SpecializationResponseDto specializationResponseDto = specializationService.createSpecialization(specializationRequestDto);
 
@@ -43,16 +39,25 @@ public class SpecializationController {
                         .fromCurrentRequest()
                         .path("/" + specializationResponseDto.id).toUriString());
 
-        return ResponseEntity.created(uri).body(specializationResponseDto);
+        return ResponseEntity
+                .created(uri)
+                .header("Message",
+                        "Specialization " + specializationResponseDto.name + "created!")
+                .body(specializationResponseDto);
     }
 
-    @PutMapping("/specializations/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<SpecializationResponseDto>  updateSpecialization(@PathVariable Long id, @RequestBody SpecializationRequestDto specializationRequestDto) {
-        return ResponseEntity.ok().body(specializationService.updateSpecialization(id, specializationRequestDto));
+        return ResponseEntity
+                .ok()
+                .header("Message",
+                        "Specialization " + specializationRequestDto.name + " updated!")
+                .body(specializationService.updateSpecialization(id, specializationRequestDto));
     }
 
-    @DeleteMapping("/specializations/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSpecialization(@PathVariable Long id) {
-        return ResponseEntity.ok(specializationService.deleteSpecialization(id));
+        return ResponseEntity
+                .ok(specializationService.deleteSpecialization(id));
     }
 }

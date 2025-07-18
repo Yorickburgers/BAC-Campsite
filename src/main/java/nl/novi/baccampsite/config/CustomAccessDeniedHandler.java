@@ -16,19 +16,41 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.setContentType("application/json");
-        response.getWriter().write("""
-            {
-                "timestamp": "%s",
-                "status": 403,
-                "error": "Forbidden",
-                "message": "Access is denied: Only for admins.",
-                "path": "%s"
-            }
-            """.formatted(
-                Instant.now(),
-                request.getRequestURI()
-        ));
+        String uri = request.getRequestURI();
+
+        if (!(uri.startsWith("/users") ||
+                uri.startsWith("/authenticate") ||
+                uri.startsWith("/campaigns") ||
+                uri.startsWith("/characters") ||
+                uri.startsWith("/professions") ||
+                uri.startsWith("/specializations") ||
+                uri.startsWith("/authenticated")
+        )) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setContentType("application/json");
+            response.getWriter().write("""
+                    {
+                        "timestamp":  "%s",
+                        "status": 404,
+                        "message": "Invalid path!",
+                        "path": "%s"
+                    }
+                    """.formatted(Instant.now(), uri
+            ));
+        } else {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write("""
+                        {
+                        "timestamp": "%s",
+                        "status": 403,
+                        "message": "Access is denied: you don't have permission.",
+                        "path": "%s"
+                        }
+                    """.formatted(
+                    Instant.now(),
+                    uri
+            ));
+        }
     }
 }

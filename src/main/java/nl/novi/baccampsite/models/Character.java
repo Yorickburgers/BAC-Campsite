@@ -90,6 +90,9 @@ public class Character {
 
     public void setLevel(int level) {
         this.level = level;
+        if (level <3) {
+            setSpecialization(null);
+        }
     }
 
     public int getHpTotal() {
@@ -162,6 +165,7 @@ public class Character {
 
     public void setProfession(Profession profession) {
         this.profession = profession;
+        setSpecialization(null);
     }
 
     public Specialization getSpecialization() {

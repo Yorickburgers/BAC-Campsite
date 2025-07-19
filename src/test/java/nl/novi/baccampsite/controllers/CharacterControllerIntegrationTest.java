@@ -84,7 +84,7 @@ class CharacterControllerIntegrationTest {
     }
 
     @Test
-    @WithMockUser(username = "Rando", roles = {"USER}"})
+    @WithMockUser(username = "Rando", roles = {"USER"})
     void shouldReturnForbiddenWhenUserIsNotOwnerOrDm() throws Exception {
         Character character = characterRepository.findAll().getFirst();
         mockMvc.perform(get("/characters/" + character.getId()))

@@ -3,12 +3,11 @@ package nl.novi.baccampsite.services;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import nl.novi.baccampsite.dtos.CharacterSummaryDto;
+import nl.novi.baccampsite.exceptions.BadRequestException;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.mappers.CharacterMapper;
+import nl.novi.baccampsite.models.*;
 import nl.novi.baccampsite.models.Character;
-import nl.novi.baccampsite.models.Profession;
-import nl.novi.baccampsite.models.Specialization;
-import nl.novi.baccampsite.models.User;
 import nl.novi.baccampsite.repositories.CharacterRepository;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
 import nl.novi.baccampsite.repositories.SpecializationRepository;
@@ -212,12 +211,101 @@ class CharacterServiceUnitTest {
 
     @Test
     void shouldClaimCharacter() {
+        char1.setId(1L);
+        char1.setUser(null);
+
+        Campaign campaign = new Campaign();
+        campaign.setId(100L);
+        campaign.setName("Trouble in Aelawune");
+        campaign.setDungeonMaster(user2);
+
+        char1.setCampaign(campaign);
+
+        user1.setCharacters(List.of());
+
+        UserDetails userDetails = Mockito.mock(UserDetails.class);
+        Mockito.when(userDetails.getUsername()).thenReturn("Brandon");
+        Mockito.when(characterRepository.findById(1L)).thenReturn(Optional.of(char1));
+        Mockito.when(userRepository.findById("Brandon")).thenReturn(Optional.of(user1));
+
+        Mockito.when(characterRepository.save(char1)).thenReturn(char1);
+
+        CharacterResponseDto result = characterService.claimCharacter(1L, userDetails);
+
+        assertEquals("Trouble in Aelawune", result.campaign.name);
+        assertEquals("Brandon", result.user);
+        assertEquals(user1, char1.getUser());
+
 
     }
 
     @Test
-    void shouldSpecializeCharacter() {
+    void shouldThrowIfCharacterAlreadyClaimed() {
+        char1.setId(1L);
+        char1.setUser(user1);
+
+        Mockito.when(characterRepository.findById(1L)).thenReturn(Optional.of(char1));
+
+        UserDetails userDetails = Mockito.mock(UserDetails.class);
+
+        BadRequestException ex = assertThrows(
+                BadRequestException.class,
+                () -> characterService.claimCharacter(1L, userDetails)
+        );
+
+        assertTrue(ex.getMessage().contains("already claimed"));
     }
+
+    @Test
+    void shouldThrowIfUserIsDungeonMaster() {
+        char1.setUser(null);
+
+        Campaign campaign = new Campaign();
+        campaign.setId(200L);
+        campaign.setDungeonMaster(user1);
+        char1.setCampaign(campaign);
+
+        UserDetails userDetails = Mockito.mock(UserDetails.class);
+        Mockito.when(userDetails.getUsername()).thenReturn("Brandon");
+
+        Mockito.when(characterRepository.findById(1L)).thenReturn(Optional.of(char1));
+        Mockito.when(userRepository.findById("Brandon")).thenReturn(Optional.of(user1));
+
+        BadRequestException ex = assertThrows(
+                BadRequestException.class,
+                () -> characterService.claimCharacter(1L, userDetails)
+        );
+
+        assertTrue(ex.getMessage().contains("Dungeon Masters cannot claim"));
+    }
+
+    @Test
+    void ShouldThrowIfUserAlreadyInCampaign() {
+        Campaign campaign = new Campaign();
+        campaign.setId(300L);
+        campaign.setDungeonMaster(user2);
+        char1.setCampaign(campaign);
+        char1.setUser(null);
+
+        char2.setCampaign(campaign);
+        user1.setCharacters(List.of(char2));
+        UserDetails userDetails = Mockito.mock(UserDetails.class);
+        Mockito.when(userDetails.getUsername()).thenReturn("Brandon");
+
+        Mockito.when(characterRepository.findById(1L)).thenReturn(Optional.of(char1));
+        Mockito.when(userRepository.findById("Brandon")).thenReturn(Optional.of(user1));
+
+        BadRequestException ex = assertThrows(
+                BadRequestException.class,
+                () -> characterService.claimCharacter(1L, userDetails)
+        );
+
+        assertTrue(ex.getMessage().contains("already has a character in this campaign"));
+    }
+
+
+
+
 
     @Test
     void shouldDeleteCharacter() {

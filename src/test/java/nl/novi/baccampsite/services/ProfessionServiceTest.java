@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,7 +54,22 @@ class ProfessionServiceUnitTest {
     }
 
     @Test
-    void retrieveProfession() {
+    void shouldRetrieveProfession() {
+        Profession prof1 = new Profession();
+        prof1.setName("Blood Hunter");
+        prof1.setDescription("Hunting for Blood");
+        prof1.setTraitOne("Bloodlust");
+        prof1.setId(StringUtils.slugify(prof1.getName()));
+
+        Mockito.when(professionRepository.findById(prof1.getId())).thenReturn(Optional.of(prof1));
+
+        ProfessionResponseDto result = professionService.retrieveProfession(prof1.getId());
+
+        assertEquals(prof1.getName(), result.name);
+        assertEquals(prof1.getId(), result.id);
+        assertEquals(prof1.getDescription(), result.description);
+        assertEquals(prof1.getTraitOne(), result.traitOne);
+
     }
 
     @Test

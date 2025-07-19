@@ -34,6 +34,7 @@ public class ProfessionMapper {
     public static ProfessionSummaryDto toProfessionSummaryDto (Profession profession) {
         ProfessionSummaryDto dto = new ProfessionSummaryDto();
         dto.id = profession.getId();
+        dto.path = "/professions/" + profession.getId();
         dto.name = profession.getName();
         return dto;
     }

@@ -45,6 +45,7 @@ public class CharacterMapper {
     public static CharacterSummaryDto toCharacterSummaryDto (Character character) {
         CharacterSummaryDto dto = new CharacterSummaryDto();
         dto.id = character.getId();
+        dto.path = "/characters/" + character.getId();
         dto.name = character.getName();
         dto.species = character.getSpecies();
         dto.level = character.getLevel();

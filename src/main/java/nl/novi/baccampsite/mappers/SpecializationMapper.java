@@ -29,6 +29,7 @@ public class SpecializationMapper {
     public static SpecializationSummaryDto toSpecializationSummaryDto (Specialization spec) {
         SpecializationSummaryDto dto = new SpecializationSummaryDto();
         dto.id = spec.getId();
+        dto.path = "/specializations/" + spec.getId();
         dto.name = spec.getName();
         return dto;
     }

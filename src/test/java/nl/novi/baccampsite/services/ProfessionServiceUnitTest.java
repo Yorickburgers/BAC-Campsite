@@ -69,10 +69,10 @@ class ProfessionServiceUnitTest {
 
         ProfessionResponseDto result = professionService.retrieveProfession(prof1.getId());
 
-        assertEquals(prof1.getName(), result.name);
-        assertEquals(prof1.getId(), result.id);
-        assertEquals(prof1.getDescription(), result.description);
-        assertEquals(prof1.getTraitOne(), result.traitOne);
+        assertEquals("Blood Hunter", result.name);
+        assertEquals("blood-hunter", result.id);
+        assertEquals("Hunting for Blood", result.description);
+        assertEquals("Bloodlust", result.traitOne);
 
     }
 
@@ -89,21 +89,20 @@ class ProfessionServiceUnitTest {
         requestDto.traitFour = "Craft Weapon";
 
         Mockito.when(professionRepository.findById(StringUtils.slugify(requestDto.name))).thenReturn(Optional.empty());
-//        Mockito.when(professionRepository.save(Mockito.any(Profession.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Mockito.when(professionRepository.save(Mockito.any(Profession.class)))
                 .thenReturn(ProfessionMapper.toProfession(requestDto));
         ProfessionResponseDto result = professionService.createProfession(requestDto);
 
-        assertEquals(requestDto.name, result.name);
-        assertEquals(StringUtils.slugify(requestDto.name), result.id);
-        assertEquals(requestDto.description, result.description);
-        assertEquals(requestDto.hpModifier, result.hpModifier);
-        assertEquals(requestDto.primaryAbility, result.primaryAbility);
-        assertEquals(requestDto.traitOne, result.traitOne);
-        assertEquals(requestDto.traitTwo, result.traitTwo);
-        assertEquals(requestDto.traitThree, result.traitThree);
-        assertEquals(requestDto.traitFour, result.traitFour);
+        assertEquals("Artificer", result.name);
+        assertEquals(StringUtils.slugify("Artificer"), result.id);
+        assertEquals("A crafty mechanic", result.description);
+        assertEquals(8, result.hpModifier);
+        assertEquals("Intelligence", result.primaryAbility);
+        assertEquals("Craft Trinket", result.traitOne);
+        assertEquals("Craft Turret", result.traitTwo);
+        assertEquals("Craft Armor", result.traitThree);
+        assertEquals("Craft Weapon", result.traitFour);
 
     }
 

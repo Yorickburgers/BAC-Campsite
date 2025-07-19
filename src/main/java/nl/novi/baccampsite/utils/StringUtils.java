@@ -21,4 +21,10 @@ public class StringUtils {
                 .replaceAll("-{2,}", "-")
                 .replaceAll("^-|-$", "");
     }
+
+    public static String generateSpecializationCode(String professionName, String specializationName) {
+        String prof = slugify(professionName);
+        String spec = slugify(specializationName);
+        return prof + "-" + spec;
+    }
 }

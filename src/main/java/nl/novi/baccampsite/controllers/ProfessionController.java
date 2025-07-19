@@ -29,12 +29,12 @@ public class ProfessionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfessionResponseDto>  retrieveProfession(@PathVariable Long id) {
+    public ResponseEntity<ProfessionResponseDto>  retrieveProfession(@PathVariable String id) {
         return ResponseEntity.ok(professionService.retrieveProfession(id));
     }
 
     @GetMapping("/{professionId}/specializations")
-    public ResponseEntity<List<SpecializationSummaryDto>> retrieveSpecializationsByProfession(@PathVariable Long professionId) {
+    public ResponseEntity<List<SpecializationSummaryDto>> retrieveSpecializationsByProfession(@PathVariable String professionId) {
         return ResponseEntity.ok(specializationService.retrieveSpecializationsByProfession(professionId));
     }
 
@@ -55,7 +55,7 @@ public class ProfessionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessionResponseDto>  updateProfession(@PathVariable Long id, @RequestBody ProfessionRequestDto professionRequestDto) {
+    public ResponseEntity<ProfessionResponseDto>  updateProfession(@PathVariable String id, @RequestBody ProfessionRequestDto professionRequestDto) {
         return ResponseEntity
                 .ok()
                 .header("Message",
@@ -64,7 +64,7 @@ public class ProfessionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProfession(@PathVariable Long id) {
+    public ResponseEntity<String> deleteProfession(@PathVariable String id) {
         return ResponseEntity.ok(professionService.deleteProfession(id));
     }
 }

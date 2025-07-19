@@ -12,5 +12,5 @@ public class CharacterRequestDto {
     public int intelligence;
     public int wisdom;
     public int charisma;
-    public Long professionId;
+    public String professionId;
 }

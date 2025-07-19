@@ -4,6 +4,7 @@ import nl.novi.baccampsite.dtos.ProfessionRequestDto;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
 import nl.novi.baccampsite.dtos.ProfessionSummaryDto;
 import nl.novi.baccampsite.models.Profession;
+import nl.novi.baccampsite.utils.StringUtils;
 
 import java.util.ArrayList;
 
@@ -48,5 +49,6 @@ public class ProfessionMapper {
         profession.setTraitTwo(dto.traitTwo);
         profession.setTraitThree(dto.traitThree);
         profession.setTraitFour(dto.traitFour);
+        profession.setId(StringUtils.slugify(dto.name));
     }
 }

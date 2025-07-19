@@ -1,6 +1,8 @@
 package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import nl.novi.baccampsite.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +11,9 @@ import java.util.List;
 @Table(name = "professions")
 public class Profession {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
+
+    @NotBlank
     private String name;
     private String description;
     private int hpModifier;
@@ -34,10 +37,15 @@ public class Profession {
         this.traitTwo = traitTwo;
         this.traitThree = traitThree;
         this.traitFour = traitFour;
+        this.id = StringUtils.slugify(name);
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

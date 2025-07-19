@@ -10,7 +10,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@RestController("/specializations")
+@RestController
+@RequestMapping("/specializations")
 public class SpecializationController {
     private final SpecializationService specializationService;
 

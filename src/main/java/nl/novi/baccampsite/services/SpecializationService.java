@@ -24,7 +24,7 @@ public class SpecializationService {
         this.professionRepository = professionRepository;
     }
 
-    public List<SpecializationSummaryDto> retrieveSpecializationsByProfession(Long id) {
+    public List<SpecializationSummaryDto> retrieveSpecializationsByProfession(String id) {
         List<SpecializationSummaryDto> specializations = new ArrayList<>();
         specializationRepository.findAllByProfessionId(id).forEach(specialization -> specializations.add(SpecializationMapper.toSpecializationSummaryDto(specialization)));
         return specializations;

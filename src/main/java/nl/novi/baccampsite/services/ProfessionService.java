@@ -40,7 +40,8 @@ public class ProfessionService {
     }
 
     public ProfessionResponseDto updateProfession(String id, ProfessionRequestDto professionRequestDto) {
-        Profession currentProfession = professionRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!"));
+        Profession currentProfession = professionRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!"));
         ProfessionMapper.updateProfessionFromDto(professionRequestDto, currentProfession);
         return ProfessionMapper.toProfessionResponseDto(professionRepository.save(currentProfession));
     }

@@ -303,11 +303,106 @@ class CharacterServiceUnitTest {
         assertTrue(ex.getMessage().contains("already has a character in this campaign"));
     }
 
+    @Test
+    void shouldSpecializeCharacter() {
+        char2.setId(2L);
+        char2.setLevel(3);
 
+        char2.setSpecialization(null);
 
+        Mockito.when(characterRepository.findById(2L)).thenReturn(Optional.of(char2));
+        Mockito.when(specializationRepository.findById("fallen-wyrdweaver")).thenReturn(Optional.of(spec2));
 
+        Mockito.when(characterRepository.save(char2)).thenReturn(char2);
+
+        CharacterResponseDto result = characterService.specializeCharacter(2L, "fallen-wyrdweaver");
+
+        assertEquals("Wyrdweaver", result.specialization.name);
+        assertEquals("Fallen", result.profession.name);
+        assertEquals(spec2, char2.getSpecialization());
+    }
+
+    @Test
+    void shouldThrowWhenCharacterLevelTooLow() {
+        char2.setId(2L);
+        char2.setLevel(2);
+        char2.setSpecialization(null);
+        Mockito.when(characterRepository.findById(2L)).thenReturn(Optional.of(char2));
+        Mockito.when(specializationRepository.findById("fallen-wyrdweaver")).thenReturn(Optional.of(spec2));
+
+        BadRequestException ex = assertThrows(
+                BadRequestException.class,
+                () -> characterService.specializeCharacter(2L, "fallen-wyrdweaver")
+        );
+
+        assertEquals("Character must be level 3 or higher to choose a specialization.", ex.getMessage());
+    }
+
+    @Test
+    void shouldThrowWhenSpecializationDoesNotMatchProfession() {
+        char2.setId(2L);
+        char2.setLevel(3);
+        char2.setSpecialization(null);
+        Mockito.when(characterRepository.findById(2L)).thenReturn(Optional.of(char2));
+        Mockito.when(specializationRepository.findById("mountain-thane-thunder-lord")).thenReturn(Optional.of(spec1));
+
+        BadRequestException ex = assertThrows(
+                BadRequestException.class,
+                () -> characterService.specializeCharacter(2L, "mountain-thane-thunder-lord")
+        );
+
+        assertEquals("This specialization does not belong to the character's profession.", ex.getMessage());
+    }
+
+    @Test
+    void shouldThrowWhenCharacterNotFound() {
+        Mockito.when(characterRepository.findById(99L)).thenReturn(Optional.empty());
+
+        RecordNotFoundException ex = assertThrows(
+                RecordNotFoundException.class,
+                () -> characterService.specializeCharacter(99L, "fallen-wyrdweaver")
+        );
+
+        assertEquals("Character 99 not found!", ex.getMessage());
+    }
+
+    @Test
+    void shouldThrowWhenSpecializationNotFound() {
+        char1.setId(1L);
+
+        Mockito.when(characterRepository.findById(1L)).thenReturn(Optional.of(char1));
+        Mockito.when(specializationRepository.findById("fallen-wrydweaver")).thenReturn(Optional.empty());
+
+        RecordNotFoundException ex = assertThrows(
+                RecordNotFoundException.class,
+                () -> characterService.specializeCharacter(1L, "fallen-wrydweaver")
+        );
+
+        assertEquals("Specialization fallen-wrydweaver not found!", ex.getMessage());
+    }
 
     @Test
     void shouldDeleteCharacter() {
+        char1.setId(1L);
+
+        Mockito.when(characterRepository.findById(1L)).thenReturn(Optional.of(char1));
+
+        String result = characterService.deleteCharacter(1L);
+
+        Mockito.verify(characterRepository).delete(char1);
+        assertEquals("Character Wendy has been deleted!", result);
+    }
+
+    @Test
+    void shouldThrowWhenDeletingNonExistentCharacter() {
+        Mockito.when(characterRepository.findById(5L)).thenReturn(Optional.empty());
+
+        RecordNotFoundException ex = assertThrows(
+                RecordNotFoundException.class,
+                () -> characterService.deleteCharacter(5L)
+        );
+
+        assertEquals("Character 5 not found!", ex.getMessage());
+        Mockito.verify(characterRepository, Mockito.never()).delete(Mockito.any());
     }
 }

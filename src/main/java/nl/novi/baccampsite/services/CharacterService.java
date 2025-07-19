@@ -117,6 +117,6 @@ public CharacterResponseDto specializeCharacter(Long charId, String specId) {
         Character character = characterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
         characterRepository.delete(character);
-        return "Character " + character.getName() + " with has been deleted!";
+        return "Character " + character.getName() + " has been deleted!";
     }
 }

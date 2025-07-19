@@ -3,12 +3,14 @@ package nl.novi.baccampsite.services;
 import nl.novi.baccampsite.dtos.SpecializationRequestDto;
 import nl.novi.baccampsite.dtos.SpecializationResponseDto;
 import nl.novi.baccampsite.dtos.SpecializationSummaryDto;
+import nl.novi.baccampsite.exceptions.BadRequestException;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.mappers.SpecializationMapper;
 import nl.novi.baccampsite.models.Profession;
 import nl.novi.baccampsite.models.Specialization;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
 import nl.novi.baccampsite.repositories.SpecializationRepository;
+import nl.novi.baccampsite.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,18 +38,21 @@ public class SpecializationService {
         return specializations;
     }
 
-    public SpecializationResponseDto retrieveSpecialization(Long id) {
+    public SpecializationResponseDto retrieveSpecialization(String id) {
         return SpecializationMapper.toSpecializationResponseDto(specializationRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Specialization " + id + " not found!")));
     }
 
     public SpecializationResponseDto createSpecialization(SpecializationRequestDto specializationRequestDto) {
         Profession profession = professionRepository.findById(specializationRequestDto.professionId)
                 .orElseThrow(() -> new RecordNotFoundException("Profession " + specializationRequestDto.professionId + " not found!"));
+        if (specializationRepository.findById(StringUtils.slugify(specializationRequestDto.name)).isPresent()) {
+            throw new BadRequestException("Specialization " + specializationRequestDto.name + " already exists!");
+        }
         Specialization specialization = SpecializationMapper.toSpecialization(specializationRequestDto, profession);
         return SpecializationMapper.toSpecializationResponseDto(specializationRepository.save(specialization));
     }
 
-    public SpecializationResponseDto updateSpecialization(Long id, SpecializationRequestDto specializationRequestDto) {
+    public SpecializationResponseDto updateSpecialization(String id, SpecializationRequestDto specializationRequestDto) {
         Specialization currentSpec = specializationRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Specialization " + id + " not found!"));
         Profession profession = professionRepository.findById(specializationRequestDto.professionId)
@@ -56,7 +61,7 @@ public class SpecializationService {
         return SpecializationMapper.toSpecializationResponseDto(specializationRepository.save(currentSpec));
     }
 
-    public String deleteSpecialization (Long id) {
+    public String deleteSpecialization (String id) {
         Specialization specialization = specializationRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Specialization " + id + " not found!"));
         specializationRepository.delete(specialization);
         return "Specialization " + specialization.getName() + " with id " + id + " has been deleted!";

@@ -11,6 +11,7 @@ import java.util.List;
 @Table(name = "professions")
 public class Profession {
     @Id
+    @Column(unique = true)
     private String id;
 
     @NotBlank

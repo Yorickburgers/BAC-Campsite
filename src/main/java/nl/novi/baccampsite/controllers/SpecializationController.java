@@ -26,7 +26,7 @@ public class SpecializationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SpecializationResponseDto>  retrieveSpecialization(@PathVariable Long id) {
+    public ResponseEntity<SpecializationResponseDto>  retrieveSpecialization(@PathVariable String id) {
         return ResponseEntity
                 .ok(specializationService.retrieveSpecialization(id));
     }
@@ -48,7 +48,7 @@ public class SpecializationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SpecializationResponseDto>  updateSpecialization(@PathVariable Long id, @RequestBody SpecializationRequestDto specializationRequestDto) {
+    public ResponseEntity<SpecializationResponseDto>  updateSpecialization(@PathVariable String id, @RequestBody SpecializationRequestDto specializationRequestDto) {
         return ResponseEntity
                 .ok()
                 .header("Message",
@@ -57,7 +57,7 @@ public class SpecializationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSpecialization(@PathVariable Long id) {
+    public ResponseEntity<String> deleteSpecialization(@PathVariable String id) {
         return ResponseEntity
                 .ok(specializationService.deleteSpecialization(id));
     }

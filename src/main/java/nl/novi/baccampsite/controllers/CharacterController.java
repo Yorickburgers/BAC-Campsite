@@ -95,7 +95,7 @@ public class CharacterController {
     }
 
     @PutMapping("/{charId}/specialize/{specId}")
-    public ResponseEntity<CharacterResponseDto> specializeCharacter(@PathVariable Long charId, @PathVariable Long specId, @AuthenticationPrincipal  UserDetails userDetails) {
+    public ResponseEntity<CharacterResponseDto> specializeCharacter(@PathVariable Long charId, @PathVariable String specId, @AuthenticationPrincipal  UserDetails userDetails) {
         CharacterResponseDto character = characterService.retrieveCharacter(charId);
         if (!SecurityUtil.canSpecCharacter(userDetails, character)) {
             throw new ForbiddenException("You are not the owner or dungeon master of this character");

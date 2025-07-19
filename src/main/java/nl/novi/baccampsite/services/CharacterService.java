@@ -98,7 +98,7 @@ public class CharacterService {
         return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
     }
 
-public CharacterResponseDto specializeCharacter(Long charId, Long specId) {
+public CharacterResponseDto specializeCharacter(Long charId, String specId) {
     Character character = characterRepository.findById(charId)
             .orElseThrow(() -> new RecordNotFoundException("Character " + charId + " not found!"));
     Specialization spec = specializationRepository.findById(specId)

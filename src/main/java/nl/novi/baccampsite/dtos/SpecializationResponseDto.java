@@ -1,7 +1,7 @@
 package nl.novi.baccampsite.dtos;
 
 public class SpecializationResponseDto {
-    public Long id;
+    public String id;
     public String name;
     public String description;
     public String traitOne;

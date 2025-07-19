@@ -2,10 +2,12 @@ package nl.novi.baccampsite.services;
 
 import nl.novi.baccampsite.dtos.ProfessionRequestDto;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
+import nl.novi.baccampsite.exceptions.BadRequestException;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.mappers.ProfessionMapper;
 import nl.novi.baccampsite.models.Profession;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
+import nl.novi.baccampsite.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ public class ProfessionService {
     }
 
     public ProfessionResponseDto createProfession(ProfessionRequestDto professionRequestDto) {
+        if (professionRepository.findById(StringUtils.slugify(professionRequestDto.name)).isPresent()) {
+            throw new BadRequestException("Profession " + professionRequestDto.name + " already exists!");
+        }
         Profession profession = ProfessionMapper.toProfession(professionRequestDto);
         return ProfessionMapper.toProfessionResponseDto(professionRepository.save(profession));
     }

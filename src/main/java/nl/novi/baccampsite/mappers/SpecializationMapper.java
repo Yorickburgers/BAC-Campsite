@@ -5,6 +5,7 @@ import nl.novi.baccampsite.dtos.SpecializationResponseDto;
 import nl.novi.baccampsite.dtos.SpecializationSummaryDto;
 import nl.novi.baccampsite.models.Profession;
 import nl.novi.baccampsite.models.Specialization;
+import nl.novi.baccampsite.utils.StringUtils;
 
 public class SpecializationMapper {
     public static SpecializationResponseDto toSpecializationResponseDto (Specialization spec) {
@@ -42,5 +43,6 @@ public class SpecializationMapper {
         spec.setTraitThree(dto.traitThree);
         spec.setTraitFour(dto.traitFour);
         spec.setProfession(profession);
+        spec.setId(StringUtils.generateSpecializationCode(profession.getId(), StringUtils.slugify(dto.name)));
     }
 }

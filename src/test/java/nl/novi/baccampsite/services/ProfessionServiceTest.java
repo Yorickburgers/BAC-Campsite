@@ -4,6 +4,7 @@ import nl.novi.baccampsite.BacCampsiteApplication;
 import nl.novi.baccampsite.dtos.ProfessionRequestDto;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
 import nl.novi.baccampsite.exceptions.BadRequestException;
+import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.mappers.ProfessionMapper;
 import nl.novi.baccampsite.models.Profession;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
@@ -120,7 +121,7 @@ class ProfessionServiceUnitTest {
     }
 
     @Test
-    void updateProfession() {
+    void shouldUpdateProfession() {
         String id = "wizard";
 
         Profession existingProfession = new Profession();
@@ -145,8 +146,27 @@ class ProfessionServiceUnitTest {
     }
 
     @Test
-    void deleteProfession() {
-        String id = "warlock";
+    void shouldDeleteProfession() {
+        String id = "monk";
+        Profession prof = new Profession();
+        prof.setId(id);
+        prof.setName("Monk");
 
+        Mockito.when(professionRepository.findById(id)).thenReturn(Optional.of(prof));
+
+        String result = professionService.deleteProfession(id);
+
+        assertEquals("Profession Monk with id monk has been deleted!", result);
+        Mockito.verify(professionRepository).delete(prof);
+    }
+
+    @Test
+    void shouldThrowWhenProfessionNotFound() {
+        String id = "mnok";
+        Mockito.when(professionRepository.findById(id)).thenReturn(Optional.empty());
+
+        RecordNotFoundException ex = assertThrows(RecordNotFoundException.class, () -> professionService.deleteProfession(id));
+
+        assertEquals("Profession mnok not found!", ex.getMessage());
     }
 }

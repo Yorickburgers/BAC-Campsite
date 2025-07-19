@@ -28,7 +28,8 @@ public class ProfessionService {
     }
 
     public ProfessionResponseDto retrieveProfession(String id) {
-        return ProfessionMapper.toProfessionResponseDto(professionRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!")));
+        return ProfessionMapper.toProfessionResponseDto(professionRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!")));
     }
 
     public ProfessionResponseDto createProfession(ProfessionRequestDto professionRequestDto) {
@@ -47,7 +48,8 @@ public class ProfessionService {
     }
 
     public String deleteProfession(String id) {
-        Profession profession = professionRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!"));
+        Profession profession = professionRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException("Profession " + id + " not found!"));
         professionRepository.delete(profession);
         return "Profession " + profession.getName() + " with id " + id + " has been deleted!";
     }

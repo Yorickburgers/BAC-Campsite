@@ -1,6 +1,5 @@
 package nl.novi.baccampsite.services;
 
-import nl.novi.baccampsite.BacCampsiteApplication;
 import nl.novi.baccampsite.dtos.ProfessionRequestDto;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
 import nl.novi.baccampsite.exceptions.BadRequestException;

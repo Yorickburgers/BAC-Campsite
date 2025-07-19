@@ -89,6 +89,10 @@ public class CampaignService {
         if (character.getCampaign() != null && character.getCampaign().getId().equals(campaignId)) {
             throw new BadRequestException("Character is already part of this campaign!");
         }
+        if (campaign.getCharacters().stream().anyMatch(ch ->
+                ch.getUser().getUsername().equals(character.getUser().getUsername()))) {
+            throw new BadRequestException("Each user may only have one character per campaign");
+        }
         character.setCampaign(campaign);
         characterRepository.save(character);
         campaign.getCharacters().add(character);

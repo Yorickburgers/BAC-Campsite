@@ -3,6 +3,7 @@ package nl.novi.baccampsite.services;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
 import nl.novi.baccampsite.models.Profession;
 import nl.novi.baccampsite.repositories.ProfessionRepository;
+import nl.novi.baccampsite.utils.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,11 +29,13 @@ class ProfessionServiceUnitTest {
         prof1.setId("bard");
         prof1.setName("Bard");
         prof1.setDescription("Whimsical and Manipulative");
+        prof1.setTraitOne("Inspiration");
 
         Profession prof2 = new Profession();
-        prof2.setId("cleric");
         prof2.setName("Cleric");
         prof2.setDescription("Devout and Overpowered");
+        prof2.setTraitOne("Penance");
+        prof2.setId(StringUtils.slugify(prof2.getName()));
 
         List<Profession> mockProfessions = List.of(prof1, prof2);
 
@@ -45,6 +48,8 @@ class ProfessionServiceUnitTest {
         assertEquals("cleric", result.get(1).id);
         assertEquals("Whimsical and Manipulative", result.get(0).description);
         assertEquals("Devout and Overpowered", result.get(1).description);
+        assertEquals("Inspiration", result.get(0).traitOne);
+        assertEquals("Penance", result.get(1).traitOne);
     }
 
     @Test

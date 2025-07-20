@@ -1,6 +1,10 @@
 package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "characters")
@@ -8,16 +12,42 @@ public class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "Name is required")
+    @Size(min = 3, max = 30, message = "Name must be between 3 and 30 characters")
     private String name;
     private String backstory;
+
+    @NotBlank(message = "Species is required")
     private String species;
+
+    @Min(1)
+    @Max(20)
     private int level;
     private int hpTotal;
+
+    @Min(1)
+    @Max(20)
     private int strength;
+
+    @Min(1)
+    @Max(20)
     private int dexterity;
+
+    @Min(1)
+    @Max(20)
     private int constitution;
+
+    @Min(1)
+    @Max(20)
     private int intelligence;
+
+    @Min(1)
+    @Max(20)
     private int wisdom;
+
+    @Min(1)
+    @Max(20)
     private int charisma;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -57,6 +57,13 @@ class CharacterControllerIntegrationTest {
         character.setName("Shasz'liq");
         character.setUser(owner);
         character.setLevel(5);
+        character.setDexterity(18);
+        character.setStrength(14);
+        character.setConstitution(16);
+        character.setIntelligence(8);
+        character.setWisdom(8);
+        character.setCharisma(10);
+        character.setSpecies("Lizardfolk");
         character.setProfession(professionRepository.findById("monk").orElseThrow(() -> new RecordNotFoundException("No profession found")));
         characterRepository.save(character);
     }

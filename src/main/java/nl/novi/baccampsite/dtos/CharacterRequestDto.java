@@ -5,7 +5,6 @@ public class CharacterRequestDto {
     public String backstory;
     public String species;
     public int level;
-    public int hpTotal;
     public int strength;
     public int dexterity;
     public int constitution;

@@ -87,7 +87,7 @@ public class CharacterMapper {
         if (dto.charisma >= 1 && dto.charisma != character.getCharisma()) {
             character.setCharisma(dto.charisma);
         }
-        if (dto.professionId != null && !dto.professionId.equals(character.getProfession().getId())) {
+        if (dto.professionId != null && (character.getProfession() == null || !dto.professionId.equals(character.getProfession().getId()))) {
             character.setProfession(profession);
             character.setSpecialization(null);
         }

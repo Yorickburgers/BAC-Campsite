@@ -99,8 +99,11 @@ public class Character {
         return hpTotal;
     }
 
-    public void setHpTotal(int hpTotal) {
-        this.hpTotal = hpTotal;
+    public void recalculateHpTotal() {
+        int baseHp = profession.getHpModifier();
+        int hpPerLevel = (profession.getHpModifier()/2)+1;
+        int conModifier = (int) Math.floor((constitution - 10) / 2.0);
+        this.hpTotal = baseHp + ((level-1)*hpPerLevel) + (level * conModifier);
     }
 
     public int getStrength() {

@@ -57,17 +57,40 @@ public class CharacterMapper {
     }
 
     public static void updateCharacterFromDto(CharacterRequestDto dto, Character character, Profession profession) {
-        character.setName(dto.name);
-        character.setBackstory(dto.backstory);
-        character.setSpecies(dto.species);
-        character.setLevel(dto.level);
-        character.setHpTotal(dto.hpTotal);
-        character.setStrength(dto.strength);
-        character.setDexterity(dto.dexterity);
-        character.setConstitution(dto.constitution);
-        character.setIntelligence(dto.intelligence);
-        character.setWisdom(dto.wisdom);
-        character.setCharisma(dto.charisma);
-        character.setProfession(profession);
+        if (dto.name != null && !dto.name.equals(character.getName())) {
+            character.setName(dto.name);
+        }
+        if (dto.backstory != null && !dto.backstory.equals(character.getBackstory())) {
+            character.setBackstory(dto.backstory);
+        }
+        if (dto.species != null && !dto.species.equals(character.getSpecies())) {
+            character.setSpecies(dto.species);
+        }
+        if (dto.level >= 1 && dto.level != character.getLevel()) {
+            character.setLevel(dto.level);
+        }
+        if (dto.strength >= 1 && dto.strength != character.getStrength()) {
+            character.setStrength(dto.strength);
+        }
+        if (dto.dexterity >= 1 && dto.dexterity != character.getDexterity()) {
+            character.setDexterity(dto.dexterity);
+        }
+        if (dto.constitution >= 1 && dto.constitution != character.getConstitution()) {
+            character.setConstitution(dto.constitution);
+        }
+        if (dto.intelligence >= 1 && dto.intelligence != character.getIntelligence()) {
+            character.setIntelligence(dto.intelligence);
+        }
+        if (dto.wisdom >= 1 && dto.wisdom != character.getWisdom()) {
+            character.setWisdom(dto.wisdom);
+        }
+        if (dto.charisma >= 1 && dto.charisma != character.getCharisma()) {
+            character.setCharisma(dto.charisma);
+        }
+        if (dto.professionId != null && !dto.professionId.equals(character.getProfession().getId())) {
+            character.setProfession(profession);
+            character.setSpecialization(null);
+        }
+        character.recalculateHpTotal();
     }
 }

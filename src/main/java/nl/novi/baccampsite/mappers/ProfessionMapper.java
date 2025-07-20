@@ -41,14 +41,30 @@ public class ProfessionMapper {
     }
 
     public static void updateProfessionFromDto (ProfessionRequestDto dto, Profession profession) {
-        profession.setName(dto.name);
-        profession.setDescription(dto.description);
-        profession.setHpModifier(dto.hpModifier);
-        profession.setPrimaryAbility(dto.primaryAbility);
-        profession.setTraitOne(dto.traitOne);
-        profession.setTraitTwo(dto.traitTwo);
-        profession.setTraitThree(dto.traitThree);
-        profession.setTraitFour(dto.traitFour);
-        profession.setId(StringUtils.slugify(dto.name));
+        if (dto.name != null && !dto.name.equals(profession.getName())) {
+            profession.setName(dto.name);
+            profession.setId(StringUtils.slugify(dto.name));
+        }
+        if (dto.description != null && !dto.description.equals(profession.getDescription())) {
+            profession.setDescription(dto.description);
+        }
+        if (dto.hpModifier != 0 && dto.hpModifier != profession.getHpModifier()) {
+            profession.setHpModifier(dto.hpModifier);
+        }
+        if (dto.primaryAbility != null && !dto.primaryAbility.equals(profession.getPrimaryAbility())) {
+            profession.setPrimaryAbility(dto.primaryAbility);
+        }
+        if (dto.traitOne != null && !dto.traitOne.equals(profession.getTraitOne())) {
+            profession.setTraitOne(dto.traitOne);
+        }
+        if (dto.traitTwo != null && !dto.traitTwo.equals(profession.getTraitTwo())) {
+            profession.setTraitTwo(dto.traitTwo);
+        }
+        if (dto.traitThree != null && !dto.traitThree.equals(profession.getTraitThree())) {
+            profession.setTraitThree(dto.traitThree);
+        }
+        if (dto.traitFour != null && !dto.traitFour.equals(profession.getTraitFour())) {
+            profession.setTraitFour(dto.traitFour);
+        }
     }
 }

@@ -165,7 +165,6 @@ public class Character {
 
     public void setProfession(Profession profession) {
         this.profession = profession;
-        setSpecialization(null);
     }
 
     public Specialization getSpecialization() {

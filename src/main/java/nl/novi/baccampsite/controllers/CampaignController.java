@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.controllers;
 
+import jakarta.validation.Valid;
 import nl.novi.baccampsite.dtos.CampaignRequestDto;
 import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
@@ -59,7 +60,7 @@ public class CampaignController {
     }
 
     @PostMapping("/{id}/characters")
-    public ResponseEntity<CharacterResponseDto> createCharacterForCampaign(@PathVariable Long id, @RequestBody CharacterRequestDto characterRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CharacterResponseDto> createCharacterForCampaign(@PathVariable Long id, @Valid @RequestBody CharacterRequestDto characterRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
         CampaignResponseDto campaign = campaignService.retrieveCampaign(id);
         if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
             throw new ForbiddenException("Only the Dungeon Master may create an unclaimed character for their campaign.");

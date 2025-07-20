@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.controllers;
 
+import jakarta.validation.Valid;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
 import nl.novi.baccampsite.dtos.CharacterResponseDto;
 import nl.novi.baccampsite.dtos.CharacterSummaryDto;
@@ -47,7 +48,7 @@ public class CharacterController {
     }
 
     @PostMapping
-    public ResponseEntity<CharacterResponseDto> createCharacter(@RequestBody CharacterRequestDto characterRequestDto, @AuthenticationPrincipal  UserDetails userDetails) {
+    public ResponseEntity<CharacterResponseDto> createCharacter(@Valid @RequestBody CharacterRequestDto characterRequestDto, @AuthenticationPrincipal  UserDetails userDetails) {
         CharacterResponseDto characterResponseDto = characterService.createCharacter(characterRequestDto, userDetails);
 
         URI uri = URI.create(
@@ -63,7 +64,7 @@ public class CharacterController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CharacterResponseDto>  updateCharacter(@PathVariable Long id, @RequestBody CharacterRequestDto characterRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CharacterResponseDto>  updateCharacter(@PathVariable Long id, @Valid @RequestBody CharacterRequestDto characterRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
         if (!SecurityUtil.canEditCharacter(userDetails, characterService.retrieveCharacter(id))) {
             throw new ForbiddenException("You are not the owner or dungeon master of this character");
         }

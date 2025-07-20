@@ -26,7 +26,11 @@ public class Profession {
     private String traitThree;
     private String traitFour;
 
-    @OneToMany(mappedBy = "profession", fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "profession",
+            fetch = FetchType.EAGER,
+    cascade = CascadeType.ALL,
+    orphanRemoval = true)
     private List<Specialization> specializations = new ArrayList<>();
 
     public Profession() {}

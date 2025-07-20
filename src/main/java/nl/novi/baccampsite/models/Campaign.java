@@ -16,7 +16,11 @@ public class Campaign {
     @Column(length = 2000)
     private String description;
 
-    @OneToMany(mappedBy = "campaign", fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "campaign",
+            fetch = FetchType.EAGER,
+    cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+    orphanRemoval = false)
     private List<Character> characters = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)

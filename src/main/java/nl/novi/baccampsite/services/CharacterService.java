@@ -68,6 +68,9 @@ public class CharacterService {
     public String unclaimCharacter(Long id) {
         Character character = characterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
+        if (character.getCampaign() == null) {
+            throw new BadRequestException("Characters will disappear if unclaimed while not assigned to campaign! Choose to delete instead if intended.");
+        }
         character.setUser(null);
         characterRepository.save(character);
         return "Character " + character.getName() + " has been unclaimed!";

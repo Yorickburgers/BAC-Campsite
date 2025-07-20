@@ -69,9 +69,9 @@ public class CampaignService {
         Profession profession = professionRepository.findById(characterRequestDto.professionId)
                 .orElseThrow(() -> new RecordNotFoundException("Profession " + characterRequestDto.professionId + " not found!"));
         Character character = CharacterMapper.toCharacter(characterRequestDto, profession);
-        character.setUser(null);
         character.setCampaign(campaign);
-        return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
+        character.setUser(null);
+                return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
     }
 
     public CampaignResponseDto updateCampaign(Long id, CampaignRequestDto campaignRequestDto) {
@@ -106,6 +106,9 @@ public class CampaignService {
                 .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
         if (character.getCampaign() == null || !campaignId.equals(character.getCampaign().getId())) {
             throw new RecordNotFoundException("Character is not part of this campaign!");
+        }
+        if (character.getUser() == null) {
+            throw new BadRequestException("Characters will disappear if removed from campaign without an owner! Choose to delete instead if intended. ");
         }
         character.setCampaign(null);
         characterRepository.save(character);

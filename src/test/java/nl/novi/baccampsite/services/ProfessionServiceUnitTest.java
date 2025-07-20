@@ -2,6 +2,7 @@ package nl.novi.baccampsite.services;
 
 import nl.novi.baccampsite.dtos.ProfessionRequestDto;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
+import nl.novi.baccampsite.enums.Ability;
 import nl.novi.baccampsite.exceptions.BadRequestException;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
 import nl.novi.baccampsite.mappers.ProfessionMapper;
@@ -82,7 +83,7 @@ class ProfessionServiceUnitTest {
         requestDto.name = "Artificer";
         requestDto.description = "A crafty mechanic";
         requestDto.hpModifier = 8;
-        requestDto.primaryAbility = "Intelligence";
+        requestDto.primaryAbility = Ability.INTELLIGENCE;
         requestDto.traitOne = "Craft Trinket";
         requestDto.traitTwo = "Craft Turret";
         requestDto.traitThree = "Craft Armor";
@@ -98,7 +99,7 @@ class ProfessionServiceUnitTest {
         assertEquals(StringUtils.slugify("Artificer"), result.id);
         assertEquals("A crafty mechanic", result.description);
         assertEquals(8, result.hpModifier);
-        assertEquals("Intelligence", result.primaryAbility);
+        assertEquals(Ability.INTELLIGENCE, result.primaryAbility);
         assertEquals("Craft Trinket", result.traitOne);
         assertEquals("Craft Turret", result.traitTwo);
         assertEquals("Craft Armor", result.traitThree);

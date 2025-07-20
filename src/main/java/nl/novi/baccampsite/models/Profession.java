@@ -19,6 +19,7 @@ public class Profession {
     private String name;
     private String description;
     private int hpModifier;
+    @Enumerated(EnumType.STRING)
     private Ability primaryAbility;
     private String traitOne;
     private String traitTwo;

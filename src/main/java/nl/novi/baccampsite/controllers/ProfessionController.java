@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.controllers;
 
+import jakarta.validation.Valid;
 import nl.novi.baccampsite.dtos.ProfessionRequestDto;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
 import nl.novi.baccampsite.dtos.SpecializationSummaryDto;
@@ -39,7 +40,7 @@ public class ProfessionController {
     }
 
     @PostMapping
-    public ResponseEntity<ProfessionResponseDto> createProfession(@RequestBody ProfessionRequestDto professionRequestDto) {
+    public ResponseEntity<ProfessionResponseDto> createProfession(@Valid @RequestBody ProfessionRequestDto professionRequestDto) {
         ProfessionResponseDto professionResponseDto = professionService.createProfession(professionRequestDto);
 
         URI uri = URI.create(
@@ -55,7 +56,7 @@ public class ProfessionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessionResponseDto>  updateProfession(@PathVariable String id, @RequestBody ProfessionRequestDto professionRequestDto) {
+    public ResponseEntity<ProfessionResponseDto>  updateProfession(@PathVariable String id, @Valid @RequestBody ProfessionRequestDto professionRequestDto) {
         return ResponseEntity
                 .ok()
                 .header("Message",

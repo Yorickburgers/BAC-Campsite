@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.services;
 
+import jakarta.transaction.Transactional;
 import nl.novi.baccampsite.dtos.UserRequestDto;
 import nl.novi.baccampsite.dtos.UserResponseDto;
 import nl.novi.baccampsite.exceptions.RecordNotFoundException;
@@ -7,6 +8,8 @@ import nl.novi.baccampsite.exceptions.UsernameNotFoundException;
 import nl.novi.baccampsite.mappers.UserMapper;
 import nl.novi.baccampsite.models.Authority;
 import nl.novi.baccampsite.models.User;
+import nl.novi.baccampsite.models.Character;
+import nl.novi.baccampsite.repositories.CharacterRepository;
 import nl.novi.baccampsite.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,10 +22,12 @@ import java.util.Set;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CharacterRepository characterRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CharacterRepository characterRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.characterRepository = characterRepository;
     }
 
     public List<UserResponseDto> retrieveAllUsers() {
@@ -52,9 +57,19 @@ public class UserService {
         return UserMapper.toUserResponseDto(userRepository.save(currentUser));
     }
 
+    @Transactional
     public String deleteUser(String username) {
         User user = userRepository.findById(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
+        List<Character> characters = characterRepository.findByUser(user);
+        for (Character character : characters) {
+            if (character.getCampaign() == null) {
+                characterRepository.delete(character);
+            } else {
+                character.setUser(null);
+                characterRepository.save(character);
+            }
+        }
         userRepository.delete(user);
         return "User " + user.getUsername() + " has been deleted!";
     }

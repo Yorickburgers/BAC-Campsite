@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.services;
 
+import jakarta.transaction.Transactional;
 import nl.novi.baccampsite.dtos.CampaignRequestDto;
 import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
@@ -116,9 +117,19 @@ public class CampaignService {
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
 
+    @Transactional
     public String deleteCampaign(Long id) {
         Campaign campaign = campaignRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
+        List<Character> characters = characterRepository.findByCampaign(campaign);
+        for (Character character : characters) {
+            if (character.getUser() == null) {
+                characterRepository.delete(character);
+            } else {
+                character.setCampaign(null);
+                characterRepository.save(character);
+            }
+        }
         campaignRepository.delete(campaign);
         return "Campaign " + campaign.getName() + "with id " + id + " has been deleted!";
     }

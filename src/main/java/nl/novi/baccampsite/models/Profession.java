@@ -2,6 +2,7 @@ package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import nl.novi.baccampsite.enums.Ability;
 import nl.novi.baccampsite.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class Profession {
     private String name;
     private String description;
     private int hpModifier;
-    private String primaryAbility;
+    private Ability primaryAbility;
     private String traitOne;
     private String traitTwo;
     private String traitThree;
@@ -29,7 +30,7 @@ public class Profession {
 
     public Profession() {}
 
-    public Profession(String name, String description, int hpModifier, String primaryAbility,  String traitOne, String traitTwo, String traitThree, String traitFour) {
+    public Profession(String name, String description, int hpModifier, Ability primaryAbility,  String traitOne, String traitTwo, String traitThree, String traitFour) {
         this.name = name;
         this.description = description;
         this.hpModifier = hpModifier;
@@ -73,11 +74,11 @@ public class Profession {
         this.hpModifier = hpModifier;
     }
 
-    public String getPrimaryAbility() {
+    public Ability getPrimaryAbility() {
         return primaryAbility;
     }
 
-    public void setPrimaryAbility(String primaryAbility) {
+    public void setPrimaryAbility(Ability primaryAbility) {
         this.primaryAbility = primaryAbility;
     }
 

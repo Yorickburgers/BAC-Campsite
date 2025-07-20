@@ -1,6 +1,7 @@
 package nl.novi.baccampsite.dtos;
 
 import jakarta.validation.constraints.*;
+import nl.novi.baccampsite.enums.Ability;
 
 public class ProfessionRequestDto {
     @NotBlank(message = "Please provide a name")
@@ -13,8 +14,7 @@ public class ProfessionRequestDto {
     @Max(value = 12, message = "Must be at most 12")
     public int hpModifier;
     @NotBlank(message = "Please provide the primary ability of this profession")
-
-    public String primaryAbility;
+    public Ability primaryAbility;
     @NotBlank(message = "Please provide a name for trait one")
     @Size(min = 3, max = 24, message = "name of trait must be between 3 and 24 characters long")
     public String traitOne;

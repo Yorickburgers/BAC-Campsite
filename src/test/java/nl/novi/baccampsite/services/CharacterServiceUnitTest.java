@@ -187,6 +187,7 @@ class CharacterServiceUnitTest {
     void shouldUnclaimCharacter() {
         char1.setId(1L);
         char1.setUser(user1);
+        char1.setCampaign(new Campaign("test", "A test campaign for test purposes"));
 
         Mockito.when(characterRepository.findById(1L)).thenReturn(Optional.of(char1));
         Mockito.when(characterRepository.save(char1)).thenReturn(char1);
@@ -207,6 +208,22 @@ class CharacterServiceUnitTest {
         );
 
         assertTrue(thrown.getMessage().contains("Character 99 not found"));
+    }
+
+    @Test
+    void shouldThrowIfUnclaimWouldOrphanizeCharacter() {
+        char1.setId(1L);
+        char1.setUser(user1);
+        char1.setCampaign(null);
+
+        Mockito.when(characterRepository.findById(1L)).thenReturn(Optional.of(char1));
+
+        BadRequestException thrown = assertThrows(
+                BadRequestException.class,
+                () -> characterService.unclaimCharacter(1L)
+        );
+
+        assertTrue(thrown.getMessage().contains("disappear"));
     }
 
     @Test

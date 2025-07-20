@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.controllers;
 
+import jakarta.validation.Valid;
 import nl.novi.baccampsite.dtos.UserRequestDto;
 import nl.novi.baccampsite.dtos.UserResponseDto;
 import nl.novi.baccampsite.exceptions.ForbiddenException;
@@ -45,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
         UserResponseDto userResponseDto = userService.createUser(userRequestDto);
         userService.addAuthority(userResponseDto.username, "ROLE_USER");
         URI uri = URI.create(
@@ -61,7 +62,7 @@ public class UserController {
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<UserResponseDto>  updateUser(@PathVariable String username, @RequestBody UserRequestDto userRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<UserResponseDto>  updateUser(@PathVariable String username, @Valid @RequestBody UserRequestDto userRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
         if (!userDetails.getUsername().equals(username)) {
             throw new ForbiddenException("You can only update your own details.");
 

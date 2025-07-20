@@ -1,6 +1,7 @@
 package nl.novi.baccampsite.dtos;
 
 public class ProfessionSummaryDto {
-    public Long id;
+    public String id;
+    public String path;
     public String name;
 }

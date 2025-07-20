@@ -68,6 +68,9 @@ public class CharacterService {
     public String unclaimCharacter(Long id) {
         Character character = characterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
+        if (character.getCampaign() == null) {
+            throw new BadRequestException("Characters will disappear if unclaimed while not assigned to campaign! Choose to delete instead if intended.");
+        }
         character.setUser(null);
         characterRepository.save(character);
         return "Character " + character.getName() + " has been unclaimed!";
@@ -98,7 +101,7 @@ public class CharacterService {
         return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
     }
 
-public CharacterResponseDto specializeCharacter(Long charId, Long specId) {
+public CharacterResponseDto specializeCharacter(Long charId, String specId) {
     Character character = characterRepository.findById(charId)
             .orElseThrow(() -> new RecordNotFoundException("Character " + charId + " not found!"));
     Specialization spec = specializationRepository.findById(specId)
@@ -117,6 +120,6 @@ public CharacterResponseDto specializeCharacter(Long charId, Long specId) {
         Character character = characterRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + id + " not found!"));
         characterRepository.delete(character);
-        return "Character " + character.getName() + " with has been deleted!";
+        return "Character " + character.getName() + " has been deleted!";
     }
 }

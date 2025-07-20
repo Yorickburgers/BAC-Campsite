@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.services;
 
+import jakarta.transaction.Transactional;
 import nl.novi.baccampsite.dtos.CampaignRequestDto;
 import nl.novi.baccampsite.dtos.CampaignResponseDto;
 import nl.novi.baccampsite.dtos.CharacterRequestDto;
@@ -69,9 +70,9 @@ public class CampaignService {
         Profession profession = professionRepository.findById(characterRequestDto.professionId)
                 .orElseThrow(() -> new RecordNotFoundException("Profession " + characterRequestDto.professionId + " not found!"));
         Character character = CharacterMapper.toCharacter(characterRequestDto, profession);
-        character.setUser(null);
         character.setCampaign(campaign);
-        return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
+        character.setUser(null);
+                return CharacterMapper.toCharacterResponseDto(characterRepository.save(character));
     }
 
     public CampaignResponseDto updateCampaign(Long id, CampaignRequestDto campaignRequestDto) {
@@ -86,9 +87,15 @@ public class CampaignService {
                 .orElseThrow(() -> new RecordNotFoundException("Campaign " + campaignId + " not found!"));
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
-        if (campaign.getCharacters().contains(character)) {
+        if (character.getCampaign() != null && character.getCampaign().getId().equals(campaignId)) {
             throw new BadRequestException("Character is already part of this campaign!");
         }
+        if (campaign.getCharacters().stream().anyMatch(ch ->
+                ch.getUser().getUsername().equals(character.getUser().getUsername()))) {
+            throw new BadRequestException("Each user may only have one character per campaign");
+        }
+        character.setCampaign(campaign);
+        characterRepository.save(character);
         campaign.getCharacters().add(character);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
@@ -98,16 +105,31 @@ public class CampaignService {
                 .orElseThrow(() -> new RecordNotFoundException("Campaign " + campaignId + " not found!"));
         Character character = characterRepository.findById(characterId)
                 .orElseThrow(() -> new RecordNotFoundException("Character " + characterId + " not found!"));
-        if (campaign.getCharacters() == null || !campaign.getCharacters().remove(character)) {
+        if (character.getCampaign() == null || !campaignId.equals(character.getCampaign().getId())) {
             throw new RecordNotFoundException("Character is not part of this campaign!");
         }
+        if (character.getUser() == null) {
+            throw new BadRequestException("Characters will disappear if removed from campaign without an owner! Choose to delete instead if intended. ");
+        }
+        character.setCampaign(null);
+        characterRepository.save(character);
         campaign.getCharacters().remove(character);
         return CampaignMapper.toCampaignResponseDto(campaignRepository.save(campaign));
     }
 
+    @Transactional
     public String deleteCampaign(Long id) {
         Campaign campaign = campaignRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException("Campaign " + id + " not found!"));
+        List<Character> characters = characterRepository.findByCampaign(campaign);
+        for (Character character : characters) {
+            if (character.getUser() == null) {
+                characterRepository.delete(character);
+            } else {
+                character.setCampaign(null);
+                characterRepository.save(character);
+            }
+        }
         campaignRepository.delete(campaign);
         return "Campaign " + campaign.getName() + "with id " + id + " has been deleted!";
     }

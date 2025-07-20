@@ -32,7 +32,11 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Character> characters =  new ArrayList<>();
 
-    @OneToMany(mappedBy = "dungeonMaster", fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "dungeonMaster",
+            fetch = FetchType.EAGER,
+    cascade = CascadeType.REMOVE,
+    orphanRemoval = true)
     private List<Campaign> campaigns = new ArrayList<>();
 
     public User() {}

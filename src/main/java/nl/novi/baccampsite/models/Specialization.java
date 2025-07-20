@@ -1,13 +1,17 @@
 package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import nl.novi.baccampsite.utils.StringUtils;
 
 @Entity
 @Table(name = "specializations")
 public class Specialization {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(unique = true)
+    private String id;
+
+    @NotBlank
     private String name;
     private String description;
     private String traitOne;
@@ -21,17 +25,22 @@ public class Specialization {
 
     public Specialization() {}
 
-    public Specialization(String name, String description,  String traitOne, String traitTwo, String traitThree, String traitFour) {
+    public Specialization(String name, String description,  String traitOne, String traitTwo, String traitThree, String traitFour, String professionId) {
         this.name = name;
         this.description = description;
         this.traitOne = traitOne;
         this.traitTwo = traitTwo;
         this.traitThree = traitThree;
         this.traitFour = traitFour;
+        this.id = StringUtils.generateSpecializationCode(professionId, StringUtils.slugify(name));
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

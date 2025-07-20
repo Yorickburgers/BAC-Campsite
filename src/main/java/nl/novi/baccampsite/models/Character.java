@@ -1,6 +1,10 @@
 package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "characters")
@@ -56,6 +60,10 @@ public class Character {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -86,14 +94,20 @@ public class Character {
 
     public void setLevel(int level) {
         this.level = level;
+        if (level <3) {
+            setSpecialization(null);
+        }
     }
 
     public int getHpTotal() {
         return hpTotal;
     }
 
-    public void setHpTotal(int hpTotal) {
-        this.hpTotal = hpTotal;
+    public void recalculateHpTotal() {
+        int baseHp = profession.getHpModifier();
+        int hpPerLevel = (profession.getHpModifier()/2)+1;
+        int conModifier = (int) Math.floor((constitution - 10) / 2.0);
+        this.hpTotal = baseHp + ((level-1)*hpPerLevel) + (level * conModifier);
     }
 
     public int getStrength() {

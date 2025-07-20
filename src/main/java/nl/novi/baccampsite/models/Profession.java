@@ -1,6 +1,9 @@
 package nl.novi.baccampsite.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import nl.novi.baccampsite.enums.Ability;
+import nl.novi.baccampsite.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,23 +12,30 @@ import java.util.List;
 @Table(name = "professions")
 public class Profession {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(unique = true)
+    private String id;
+
+    @NotBlank
     private String name;
     private String description;
     private int hpModifier;
-    private String primaryAbility;
+    @Enumerated(EnumType.STRING)
+    private Ability primaryAbility;
     private String traitOne;
     private String traitTwo;
     private String traitThree;
     private String traitFour;
 
-    @OneToMany(mappedBy = "profession", fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "profession",
+            fetch = FetchType.EAGER,
+    cascade = CascadeType.ALL,
+    orphanRemoval = true)
     private List<Specialization> specializations = new ArrayList<>();
 
     public Profession() {}
 
-    public Profession(String name, String description, int hpModifier, String primaryAbility,  String traitOne, String traitTwo, String traitThree, String traitFour) {
+    public Profession(String name, String description, int hpModifier, Ability primaryAbility,  String traitOne, String traitTwo, String traitThree, String traitFour) {
         this.name = name;
         this.description = description;
         this.hpModifier = hpModifier;
@@ -34,10 +44,15 @@ public class Profession {
         this.traitTwo = traitTwo;
         this.traitThree = traitThree;
         this.traitFour = traitFour;
+        this.id = StringUtils.slugify(name);
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -64,11 +79,11 @@ public class Profession {
         this.hpModifier = hpModifier;
     }
 
-    public String getPrimaryAbility() {
+    public Ability getPrimaryAbility() {
         return primaryAbility;
     }
 
-    public void setPrimaryAbility(String primaryAbility) {
+    public void setPrimaryAbility(Ability primaryAbility) {
         this.primaryAbility = primaryAbility;
     }
 

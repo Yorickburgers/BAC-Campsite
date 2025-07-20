@@ -30,8 +30,14 @@ public class UserMapper {
     }
 
     public static void updateUserFromDto(UserRequestDto dto, User user, PasswordEncoder passwordEncoder) {
-        user.setUsername(dto.username);
-        user.setPassword(passwordEncoder.encode(dto.password));
-        user.setEmail(dto.email);
+        if (dto.username != null && !dto.username.equals(user.getUsername())) {
+            user.setUsername(dto.username);
+        }
+        if (dto.password != null && !dto.password.isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.password));
+        }
+        if (dto.email != null && !dto.email.equals(user.getEmail())) {
+            user.setEmail(dto.email);
+        }
     }
 }

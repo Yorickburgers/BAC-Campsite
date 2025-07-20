@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.controllers;
 
+import jakarta.validation.Valid;
 import nl.novi.baccampsite.dtos.SpecializationRequestDto;
 import nl.novi.baccampsite.dtos.SpecializationResponseDto;
 import nl.novi.baccampsite.services.SpecializationService;
@@ -10,7 +11,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@RestController("/specializations")
+@RestController
+@RequestMapping("/specializations")
 public class SpecializationController {
     private final SpecializationService specializationService;
 
@@ -25,13 +27,13 @@ public class SpecializationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SpecializationResponseDto>  retrieveSpecialization(@PathVariable Long id) {
+    public ResponseEntity<SpecializationResponseDto>  retrieveSpecialization(@PathVariable String id) {
         return ResponseEntity
                 .ok(specializationService.retrieveSpecialization(id));
     }
 
     @PostMapping
-    public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@RequestBody SpecializationRequestDto specializationRequestDto) {
+    public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@Valid @RequestBody SpecializationRequestDto specializationRequestDto) {
         SpecializationResponseDto specializationResponseDto = specializationService.createSpecialization(specializationRequestDto);
 
         URI uri = URI.create(
@@ -47,7 +49,7 @@ public class SpecializationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SpecializationResponseDto>  updateSpecialization(@PathVariable Long id, @RequestBody SpecializationRequestDto specializationRequestDto) {
+    public ResponseEntity<SpecializationResponseDto>  updateSpecialization(@PathVariable String id, @Valid @RequestBody SpecializationRequestDto specializationRequestDto) {
         return ResponseEntity
                 .ok()
                 .header("Message",
@@ -56,7 +58,7 @@ public class SpecializationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSpecialization(@PathVariable Long id) {
+    public ResponseEntity<String> deleteSpecialization(@PathVariable String id) {
         return ResponseEntity
                 .ok(specializationService.deleteSpecialization(id));
     }

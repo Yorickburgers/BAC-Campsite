@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.controllers;
 
+import jakarta.validation.Valid;
 import nl.novi.baccampsite.dtos.ProfessionRequestDto;
 import nl.novi.baccampsite.dtos.ProfessionResponseDto;
 import nl.novi.baccampsite.dtos.SpecializationSummaryDto;
@@ -29,17 +30,17 @@ public class ProfessionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfessionResponseDto>  retrieveProfession(@PathVariable Long id) {
+    public ResponseEntity<ProfessionResponseDto>  retrieveProfession(@PathVariable String id) {
         return ResponseEntity.ok(professionService.retrieveProfession(id));
     }
 
     @GetMapping("/{professionId}/specializations")
-    public ResponseEntity<List<SpecializationSummaryDto>> retrieveSpecializationsByProfession(@PathVariable Long professionId) {
+    public ResponseEntity<List<SpecializationSummaryDto>> retrieveSpecializationsByProfession(@PathVariable String professionId) {
         return ResponseEntity.ok(specializationService.retrieveSpecializationsByProfession(professionId));
     }
 
     @PostMapping
-    public ResponseEntity<ProfessionResponseDto> createProfession(@RequestBody ProfessionRequestDto professionRequestDto) {
+    public ResponseEntity<ProfessionResponseDto> createProfession(@Valid @RequestBody ProfessionRequestDto professionRequestDto) {
         ProfessionResponseDto professionResponseDto = professionService.createProfession(professionRequestDto);
 
         URI uri = URI.create(
@@ -55,7 +56,7 @@ public class ProfessionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessionResponseDto>  updateProfession(@PathVariable Long id, @RequestBody ProfessionRequestDto professionRequestDto) {
+    public ResponseEntity<ProfessionResponseDto>  updateProfession(@PathVariable String id, @Valid @RequestBody ProfessionRequestDto professionRequestDto) {
         return ResponseEntity
                 .ok()
                 .header("Message",
@@ -64,7 +65,7 @@ public class ProfessionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProfession(@PathVariable Long id) {
+    public ResponseEntity<String> deleteProfession(@PathVariable String id) {
         return ResponseEntity.ok(professionService.deleteProfession(id));
     }
 }

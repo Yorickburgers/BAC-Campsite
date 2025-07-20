@@ -14,7 +14,7 @@ public class InvalidPathController {
     @RequestMapping("/**")
     public ResponseEntity<Object> invalidPath(HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
-                "status", 404,
+                "status", 400,
                 "message", "Invalid path: " + request.getRequestURI()
         ));
     }

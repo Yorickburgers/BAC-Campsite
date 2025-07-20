@@ -18,13 +18,13 @@ public class ProfessionRequestDto {
     @NotBlank(message = "Please provide a name for trait one")
     @Size(min = 3, max = 24, message = "name of trait must be between 3 and 24 characters long")
     public String traitOne;
-    @NotBlank(message = "Please provide a name for trait one")
+    @NotBlank(message = "Please provide a name for trait two")
     @Size(min = 3, max = 24, message = "name of trait must be between 3 and 24 characters long")
     public String traitTwo;
-    @NotBlank(message = "Please provide a name for trait one")
+    @NotBlank(message = "Please provide a name for trait three")
     @Size(min = 3, max = 24, message = "name of trait must be between 3 and 24 characters long")
     public String traitThree;
-    @NotBlank(message = "Please provide a name for trait one")
+    @NotBlank(message = "Please provide a name for trait four")
     @Size(min = 3, max = 24, message = "name of trait must be between 3 and 24 characters long")
     public String traitFour;
 

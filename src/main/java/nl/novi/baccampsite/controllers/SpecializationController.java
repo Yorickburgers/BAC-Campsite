@@ -1,5 +1,6 @@
 package nl.novi.baccampsite.controllers;
 
+import jakarta.validation.Valid;
 import nl.novi.baccampsite.dtos.SpecializationRequestDto;
 import nl.novi.baccampsite.dtos.SpecializationResponseDto;
 import nl.novi.baccampsite.services.SpecializationService;
@@ -32,7 +33,7 @@ public class SpecializationController {
     }
 
     @PostMapping
-    public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@RequestBody SpecializationRequestDto specializationRequestDto) {
+    public ResponseEntity<SpecializationResponseDto> createSpecializationForProfession(@Valid @RequestBody SpecializationRequestDto specializationRequestDto) {
         SpecializationResponseDto specializationResponseDto = specializationService.createSpecialization(specializationRequestDto);
 
         URI uri = URI.create(
@@ -48,7 +49,7 @@ public class SpecializationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SpecializationResponseDto>  updateSpecialization(@PathVariable String id, @RequestBody SpecializationRequestDto specializationRequestDto) {
+    public ResponseEntity<SpecializationResponseDto>  updateSpecialization(@PathVariable String id, @Valid @RequestBody SpecializationRequestDto specializationRequestDto) {
         return ResponseEntity
                 .ok()
                 .header("Message",

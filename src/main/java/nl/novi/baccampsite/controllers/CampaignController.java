@@ -44,7 +44,7 @@ public class CampaignController {
     }
 
     @PostMapping
-    public ResponseEntity<CampaignResponseDto> createCampaign(@RequestBody CampaignRequestDto campaignRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CampaignResponseDto> createCampaign(@Valid @RequestBody CampaignRequestDto campaignRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
         CampaignResponseDto campaignResponseDto = campaignService.createCampaign(campaignRequestDto, userDetails);
 
         URI uri = URI.create(
@@ -80,7 +80,7 @@ public class CampaignController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CampaignResponseDto>  updateCampaign(@PathVariable Long id, @RequestBody CampaignRequestDto campaignRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CampaignResponseDto>  updateCampaign(@PathVariable Long id, @Valid @RequestBody CampaignRequestDto campaignRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
         CampaignResponseDto campaign = campaignService.retrieveCampaign(id);
         if (!campaign.dungeonMaster.equals(userDetails.getUsername())) {
             throw new ForbiddenException("You are only allowed to edit a campaign if you are its Dungeon Master.");

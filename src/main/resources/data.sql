@@ -55,7 +55,7 @@ values ('admin', '$2a$04$4krYvHPkbhgygu8Ypmey/ud16dLRDLZp6GPGHdWBUlhbTuUukQnjC',
        ('testuser1', '$2a$04$cJxtmFJf.70edAdSiYeSjeFhAnsEWD/tXjbnEN4Y9GhpPkLTquD52', 'user1@test.nl'),
        ('testuser2', '$2a$04$uuPHXNDn22cKiUfQdAIfj.HRTgav4uctWWmTTT/oq20UQOA7v4dR6', 'user2@test.nl'),
        ('testuser3', '$2a$04$uQXTlrSuyLEkNxAfCXjC9OTrOELj85wmA8wFmqR/8fc.HYBomGtou', 'user3@test.nl'),
-       ('testuser4', '$2a$04$eka50Qed2SDN7JywIE8XaOzSntc7XsXG14wVpfz3E5PfXe0oqZt1e', 'user4@test.nl'),
+       ('testuser4', '$2a$04$eka50Qed2SDN7JywIE8XaOzSntc7XsXG14wVpfz3E5PfXe0oqZt1e', 'user4@test.nl');
 
 insert into authorities (username, authority)
 values ('admin', 'ROLE_ADMIN'),

@@ -49,6 +49,9 @@ public class CharacterController {
 
     @PostMapping
     public ResponseEntity<CharacterResponseDto> createCharacter(@Valid @RequestBody CharacterRequestDto characterRequestDto, @AuthenticationPrincipal  UserDetails userDetails) {
+        if (SecurityUtil.hasRole(userDetails, "ROLE_ADMIN")) {
+            throw new ForbiddenException("Only Users may create characters. Please login with a user-account.");
+        }
         CharacterResponseDto characterResponseDto = characterService.createCharacter(characterRequestDto, userDetails);
 
         URI uri = URI.create(

@@ -45,6 +45,9 @@ public class CampaignController {
 
     @PostMapping
     public ResponseEntity<CampaignResponseDto> createCampaign(@Valid @RequestBody CampaignRequestDto campaignRequestDto, @AuthenticationPrincipal UserDetails userDetails) {
+    if (SecurityUtil.hasRole(userDetails, "ROLE_ADMIN")) {
+        throw new ForbiddenException("Admins cannot create campaigns. Please login using a user-account.");
+    }
         CampaignResponseDto campaignResponseDto = campaignService.createCampaign(campaignRequestDto, userDetails);
 
         URI uri = URI.create(
